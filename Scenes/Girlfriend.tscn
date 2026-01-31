@@ -1,6 +1,13 @@
 [gd_scene format=3 uid="uid://dqcc5hm1qeadg"]
 
 [ext_resource type="Texture2D" uid="uid://qqmvcp417vf8" path="res://Assets/Girlfriend/haley.png" id="1_646qc"]
+[ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="2_gf_brain"]
+[ext_resource type="Script" uid="uid://bupnh0kqklshe" path="res://addons/player2/nodes/Player2AINPC.gd" id="3_player2npc"]
+[ext_resource type="Script" uid="uid://fpb2ysodtcuy" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinition.gd" id="4_ebojb"]
+[ext_resource type="Script" uid="uid://dt7mt3t7a08me" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinitions.gd" id="5_d4t3a"]
+[ext_resource type="Script" uid="uid://bsi5tjg54www7" path="res://addons/player2/helpers/config/Player2AICharacterConfig.gd" id="6_rsfka"]
+[ext_resource type="Script" uid="uid://mt8gdygmb5og" path="res://addons/player2/helpers/config/Player2TTSConfig.gd" id="7_5y75h"]
+[ext_resource type="Resource" uid="uid://das4ap6qvtr75" path="res://addons/player2/chat_config.tres" id="8_kedoj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
 atlas = ExtResource("1_646qc")
@@ -38,13 +45,40 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=888624562]
+[sub_resource type="Resource" id="Resource_3a6l0"]
+Resource = null
+resource_path = "res://Scenes/Girlfriend.tscn::Resource_3a6l0"
+script = ExtResource("5_d4t3a")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1994137267]
+[sub_resource type="Resource" id="Resource_m4t7l"]
+script = ExtResource("7_5y75h")
+tts_speed = 1.1
+tts_default_gender = 1
+voice_id = "01955d76-ed5b-7436-a182-c4d21aaca9fc"
+
+[sub_resource type="Resource" id="Resource_w8o5i"]
+script = ExtResource("6_rsfka")
+tts = SubResource("Resource_m4t7l")
+
+[node name="Girlfriend" type="Node2D" unique_id=586313670 groups=["girlfriend"]]
+script = ExtResource("2_gf_brain")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1140675579]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1221460206]
 sprite_frames = SubResource("SpriteFrames_yyaj3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1060597080]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=27034515]
 
-[node name="Area2D" type="Area2D" parent="." unique_id=199788096]
+[node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=612790088]
 
-[node name="Marker2D" type="Marker2D" parent="." unique_id=1306860006]
+[node name="Marker2D" type="Marker2D" parent="CharacterBody2D" unique_id=1530081386]
+
+[node name="Player2AINPC" type="Node" parent="." unique_id=1491766248]
+script = ExtResource("3_player2npc")
+character_name = "Penny"
+character_description = "You are Penny, an angry girlfriend confronting your partner who came home late at 2 AM with 100 missed calls. You are emotional, sarcastic, and reactive. You respond with realistic human dialogue. Never mention game mechanics or mood numbers. Stay in character."
+character_system_message = "Be passive-aggressive but can be won over with sincere apologies, empathy, and kind gestures. React emotionally to what the player says. If they apologize sincerely, soften slightly. If they lie or gaslight, get angrier. Keep responses short (1-3 sentences)."
+tool_calls_function_definitions = SubResource("Resource_3a6l0")
+character_config = SubResource("Resource_w8o5i")
+chat_config = ExtResource("8_kedoj")
