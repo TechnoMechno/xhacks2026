@@ -7,6 +7,10 @@
 atlas = ExtResource("2_cnwi5")
 region = Rect2(0, 0, 820, 1300)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
+atlas = ExtResource("2_cnwi5")
+region = Rect2(0, 0, 820, 1300)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_646qc"]
 animations = [{
 "frames": [{
@@ -16,11 +20,19 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cnwi5")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
 }]
 
 [node name="CharacterBody2D" unique_id=1473226475 instance=ExtResource("1_646qc")]
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1539628098]
-position = Vector2(-6, -10)
-scale = Vector2(0.056326218, 0.056326233)
+position = Vector2(-3, -6)
+scale = Vector2(0.031821646, 0.031821657)
 sprite_frames = SubResource("SpriteFrames_646qc")
