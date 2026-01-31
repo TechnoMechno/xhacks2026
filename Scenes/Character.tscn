@@ -10,8 +10,8 @@ script = ExtResource("1_0y7nr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1998213867]
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1860304182]
+[node name="DetectArea" type="Area2D" parent="." unique_id=1860304182]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1431852524]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=1431852524]
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1269115216]

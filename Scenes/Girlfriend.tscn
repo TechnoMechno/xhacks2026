@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dqcc5hm1qeadg"]
 
 [ext_resource type="Texture2D" uid="uid://qqmvcp417vf8" path="res://Assets/Girlfriend/haley.png" id="1_646qc"]
+[ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="1_cnwi5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
 atlas = ExtResource("1_646qc")
@@ -39,6 +40,7 @@ animations = [{
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=888624562]
+script = ExtResource("1_cnwi5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1994137267]
 sprite_frames = SubResource("SpriteFrames_yyaj3")

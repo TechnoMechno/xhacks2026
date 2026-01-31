@@ -48,8 +48,8 @@ animation = &"walk down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=824439564]
 
-[node name="Area2D" type="Area2D" parent="." unique_id=2105428115]
+[node name="DetectArea" type="Area2D" parent="." unique_id=2105428115]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1491232601]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=1491232601]
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1226389527]
