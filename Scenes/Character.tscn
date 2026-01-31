@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://bb4ydqd6sj6sc"]
 
-[ext_resource type="Script" uid="uid://jgdrf8oqwwtx" path="res://Scenes/scripts/character.gd" id="1_0y7nr"]
+[ext_resource type="Script" path="res://Scenes/scripts/character.gd" id="1_0y7nr"]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1473226475]
+visible = false
 script = ExtResource("1_0y7nr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1539628098]

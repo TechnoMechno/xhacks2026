@@ -1,7 +1,7 @@
 extends CharacterBody2D
-class_name Character
+class_name BaseCharacter
 
-@export var speed: float = 90.0
+@export var speed: float = 60.0
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
