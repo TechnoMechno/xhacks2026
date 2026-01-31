@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://bb4ydqd6sj6sc" path="res://Scenes/Character.tscn" id="1_646qc"]
 [ext_resource type="Texture2D" uid="uid://bc6on3sjo1bxb" path="res://Assets/Girlfriend/Adobe Express - file.png" id="2_cnwi5"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qtc8g"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
 atlas = ExtResource("2_cnwi5")
 region = Rect2(0, 0, 820, 1300)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qtc8g"]
 atlas = ExtResource("2_cnwi5")
 region = Rect2(0, 0, 820, 1300)
 
@@ -15,18 +15,18 @@ region = Rect2(0, 0, 820, 1300)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qtc8g")
+"texture": SubResource("AtlasTexture_cnwi5")
 }],
 "loop": true,
-"name": &"default",
+"name": &"Default",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cnwi5")
+"texture": SubResource("AtlasTexture_qtc8g")
 }],
 "loop": true,
-"name": &"new_animation",
+"name": &"new_animation_1",
 "speed": 5.0
 }]
 
@@ -36,3 +36,4 @@ animations = [{
 position = Vector2(-3, -6)
 scale = Vector2(0.031821646, 0.031821657)
 sprite_frames = SubResource("SpriteFrames_646qc")
+animation = &"Default"

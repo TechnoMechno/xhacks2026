@@ -1,3 +1,13 @@
 [gd_scene format=3 uid="uid://b2dlswso0c1qf"]
 
+[ext_resource type="PackedScene" uid="uid://cnpj4ib4tw0xh" path="res://Scenes/world.tscn" id="1_b20jg"]
+
 [node name="Main" type="Node2D" unique_id=1497922291]
+position = Vector2(0, -1)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1118503384]
+position = Vector2(263, 198)
+zoom = Vector2(3, 3)
+
+[node name="Node2D" parent="." unique_id=1539484535 instance=ExtResource("1_b20jg")]
+position = Vector2(186, 188)
