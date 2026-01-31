@@ -6,6 +6,8 @@ extends Node2D
 @onready var girlfriend: CharacterBody2D = $girlfriend
 @onready var dialogue_ui: CanvasLayer = $DialogueUI
 
+@onready var end_screen = $HUD/EndScreen
+
 func _ready() -> void:
 	print("[Main] _ready() called")
 	print("[Main] girlfriend = ", girlfriend)
@@ -50,12 +52,10 @@ func _on_dialogue_closed() -> void:
 		player.set_physics_process(true)
 
 func _on_game_won() -> void:
-	print("Game Won!")
-	# TODO: Show end screen with won = true
+	end_screen.show_result(true)
 
 func _on_game_lost() -> void:
-	print("Game Lost!")
-	# TODO: Show end screen with won = false
+	end_screen.show_result(false)
 
 func _input(event: InputEvent) -> void:
 	# Debug: Press R to reset conversation with Penny
