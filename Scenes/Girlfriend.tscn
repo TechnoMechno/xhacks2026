@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://qqmvcp417vf8" path="res://Assets/Girlfriend/haley.png" id="1_646qc"]
 [ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="2_gf_brain"]
 [ext_resource type="Script" uid="uid://bupnh0kqklshe" path="res://addons/player2/nodes/Player2AINPC.gd" id="3_player2npc"]
+[ext_resource type="Script" uid="uid://8byjq4hj2ws8" path="res://systems/mood_analyzer.gd" id="4_mood_analyzer"]
 [ext_resource type="Script" uid="uid://dt7mt3t7a08me" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinitions.gd" id="5_d4t3a"]
 [ext_resource type="Script" uid="uid://bsi5tjg54www7" path="res://addons/player2/helpers/config/Player2AICharacterConfig.gd" id="6_rsfka"]
 [ext_resource type="Script" uid="uid://mt8gdygmb5og" path="res://addons/player2/helpers/config/Player2TTSConfig.gd" id="7_5y75h"]
@@ -44,6 +45,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 20.0
+
 [sub_resource type="Resource" id="Resource_3a6l0"]
 Resource = null
 resource_path = "res://Scenes/Girlfriend.tscn::Resource_3a6l0"
@@ -58,9 +62,6 @@ voice_id = "01955d76-ed5b-7426-8748-4b0e5aea1974"
 [sub_resource type="Resource" id="Resource_w8o5i"]
 script = ExtResource("6_rsfka")
 tts = SubResource("Resource_m4t7l")
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
-radius = 20.0
 
 [node name="Girlfriend" type="CharacterBody2D" unique_id=586313670 groups=["girlfriend"]]
 script = ExtResource("2_gf_brain")
@@ -82,7 +83,11 @@ shape = SubResource("CircleShape2D_interact")
 script = ExtResource("3_player2npc")
 character_name = "Penny"
 character_description = "You are Penny, an angry girlfriend confronting your partner who came home late at 2 AM with 100 missed calls. You are emotional, sarcastic, and reactive. You respond with realistic human dialogue. Never mention game mechanics or mood numbers. Stay in character."
-character_system_message = "Be passive-aggressive but can be won over with sincere apologies, empathy, and kind gestures. React emotionally to what the player says. If they apologize sincerely, soften slightly. If they lie or gaslight, get angrier. Keep responses short (1-3 sentences)."
+character_system_message = "You're genuinely angry and hurt that they came home at 2 AM with 100 missed calls. This is serious. Be emotional, sarcastic when upset, and don't forgive easily. When they show REAL effort and sincerity, slowly soften - but stay realistic. Call out fake apologies or excuses. You need to see genuine change. Keep responses natural and short (1-3 sentences)."
 tool_calls_function_definitions = SubResource("Resource_3a6l0")
 character_config = SubResource("Resource_w8o5i")
 chat_config = ExtResource("8_kedoj")
+
+[node name="MoodAnalyzer" type="Node" parent="."]
+script = ExtResource("4_mood_analyzer")
+model = "gpt-3.5-turbo"

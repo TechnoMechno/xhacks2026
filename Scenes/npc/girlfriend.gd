@@ -3,31 +3,57 @@ extends CharacterBody2D
 signal npc_reply(text: String)
 signal npc_thinking
 signal interaction_requested  # Emitted when player wants to talk
+signal mood_updated(mood_name: String, score: int)  # Emitted when mood is analyzed
 
 const SPEED = 40.0
 
 const MOOD_TIER_PROMPTS = {
-	0: "You're furious and done. You're considering ending this relationship. Sharp, cold responses only.",
-	10: "You're extremely angry. Sarcastic and harsh. They need to prove they care.",
-	20: "You're very upset. Demanding real effort and sincerity. No excuses accepted.",
-	30: "You're angry but listening. They need to show genuine remorse and action.",
-	40: "You're hurt but engaging. Starting to calm down if they keep trying.",
-	50: "You're conflicted. Part of you wants to forgive, part is still hurt.",
-	60: "You're calming down. Their efforts are working. Still cautious.",
-	70: "You're warming up. You appreciate their effort and feel hopeful.",
-	80: "You're happy. The fight is mostly resolved. Feeling reconnected.",
-	90: "You feel loved and appreciated. Warm, affectionate responses.",
-	100: "Pure happiness. You're completely over the fight and feel closer than ever."
+	0: "You're furious and seriously questioning this relationship. Cold, sharp, and deeply hurt. They betrayed your trust.",
+	10: "You're extremely angry. Bitter and sarcastic. They have a LOT to prove. Don't soften easily.",
+	20: "You're very upset and hurt. Demanding real action, not just words. Call out excuses and lies.",
+	30: "You're angry and defensive. They need to show genuine remorse and effort. Be skeptical.",
+	40: "You're hurt but still listening. Their efforts matter but you're not convinced yet. Stay guarded.",
+	50: "You're conflicted. Part of you wants to believe them. Show vulnerability but maintain boundaries.",
+	60: "You're cautiously softening. If they keep trying sincerely, acknowledge it. Still somewhat reserved.",
+	70: "You're warming up slowly. Appreciate their genuine effort. Show you want to reconnect.",
+	80: "You're feeling better. The fight is resolving. Be more affectionate but remember what happened.",
+	90: "You feel loved again. Warm and affectionate. The hurt is fading.",
+	100: "You're happy and the fight is behind you. Loving and playful. Trust is rebuilding."
 }
 
 var _last_mood_tier: int = -1
+var _interaction_history: Array = []  # Track last interactions for mood analysis
+const MAX_HISTORY: int = 2  # Keep last 2 interactions
+var _pending_response: String = ""  # Store response while waiting for mood analysis
+var _waiting_for_mood: bool = false  # Flag to track if we're waiting
+var _current_mood: String = "Furious"  # Track current mood for context
+
+# WINNING SENTENCES - Say these 4 in sequence to instantly win!
+const WINNING_SENTENCES = [
+	"I'm so sorry I made you worry, that was completely my fault",
+	"You deserve so much better than how I treated you today",
+	"I promise I'll always call you first if something comes up",
+	"You're the most important person in my life and I love you"
+]
+var _winning_sequence_progress: int = 0  # Tracks which sentence user is on (0-3)
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var ai_npc: Node = $Player2AINPC
+@onready var mood_analyzer: Node = $MoodAnalyzer
 
 func _ready() -> void:
+	# Set motion mode to floating so girlfriend doesn't get pushed by player
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	
 	if ai_npc and ai_npc.has_signal("chat_received"):
 		ai_npc.chat_received.connect(_on_chat_received)
+	
+	# Connect mood analyzer
+	if mood_analyzer:
+		if mood_analyzer.has_signal("mood_analyzed"):
+			mood_analyzer.mood_analyzed.connect(_on_mood_analyzed)
+		if mood_analyzer.has_signal("analysis_failed"):
+			mood_analyzer.analysis_failed.connect(_on_mood_analysis_failed)
 
 func _physics_process(_delta: float) -> void:
 	# Movement disabled for now
@@ -42,6 +68,32 @@ func interact() -> void:
 	print("[Girlfriend] interaction_requested signal emitted")
 
 func receive_player_message(text: String) -> void:
+	print("\n[Girlfriend] 💬 Player said: ", text)
+	
+	# Check for winning sentence sequence FIRST - GUARANTEED WIN!
+	var normalized_input = text.to_lower().strip_edges()
+	if _check_winning_sentence(normalized_input):
+		print("[Girlfriend] 🏆 WINNING SENTENCE DETECTED! Sequence: ", _winning_sequence_progress, "/4")
+		if _winning_sequence_progress >= 4:
+			print("╔══════════════════════════════════════════════════════════╗")
+			print("║  🎉🎉🎉 ALL 4 WINNING SENTENCES! INSTANT WIN! 🎉🎉🎉  ║")
+			print("║          YOU CONQUERED THE CHALLENGE!                  ║")
+			print("╚══════════════════════════════════════════════════════════╝")
+			# Update mood to 100 and Happy immediately - NO CHATGPT INVOLVED
+			GameState.mood = 100
+			_current_mood = "Happy"
+			# Emit winning response - bypassing all other logic
+			var win_response = "I love you too! I'm so glad we talked. You're amazing. ❤️"
+			npc_reply.emit(win_response)
+			mood_updated.emit("Happy", 100)
+			print("[Girlfriend] ✅ Win condition triggered! Mood = 100, State = Happy")
+			return  # EXIT IMMEDIATELY - No further processing!
+	else:
+		# Reset sequence if they say something else
+		if _winning_sequence_progress > 0:
+			print("[Girlfriend] ⚠️ Winning sequence broken. Progress reset to 0.")
+			_winning_sequence_progress = 0
+	
 	# Classify intent
 	var intent = IntentClassifier.classify(text)
 
@@ -64,8 +116,80 @@ func receive_player_message(text: String) -> void:
 		_on_chat_received("I'm still mad at you!")
 
 func _on_chat_received(response: String) -> void:
-	# Emit reply for UI
-	npc_reply.emit(response)
+	# Parse the actual dialogue text
+	var dialogue_text = _parse_dialogue(response)
+	
+	print("\n[Girlfriend] 💬 Response received: ", dialogue_text)
+	print("[Girlfriend] Waiting for mood analysis before displaying...")
+	
+	# Store response temporarily - don't emit yet
+	_pending_response = response
+	_waiting_for_mood = true
+	
+	# Show thinking indicator to user
+	npc_thinking.emit()
+	
+	# Analyze mood using ChatGPT
+	if mood_analyzer and mood_analyzer.has_method("analyze_dialogue"):
+		print("[Girlfriend] Triggering mood analysis...")
+		# Get current score from GameState
+		var current_score = GameState.mood if GameState else 50
+		mood_analyzer.analyze_dialogue(dialogue_text, current_score, _interaction_history, _current_mood)
+	else:
+		print("[Girlfriend] ⚠️ Warning: MoodAnalyzer not found or method missing")
+		# If no analyzer, emit response immediately
+		_waiting_for_mood = false
+		npc_reply.emit(response)
+
+func _parse_dialogue(response: String) -> String:
+	"""Extract clean dialogue text from response"""
+	var json = JSON.parse_string(response)
+	if json is Dictionary and json.has("reply"):
+		return json["reply"]
+	return response
+
+func _on_mood_analyzed(mood_data: Dictionary) -> void:
+	print("\n[Girlfriend] 🎯 MOOD ANALYSIS RECEIVED:")
+	print("[Girlfriend] Full data: ", mood_data)
+	if mood_data.has("mood") and mood_data.has("score"):
+		var mood_name: String = mood_data["mood"]
+		var score: int = int(mood_data["score"])
+		
+		# Update current mood for next analysis
+		_current_mood = mood_name
+		
+		# Track interaction history
+		if mood_data.has("interaction_type"):
+			_interaction_history.append({"type": mood_data["interaction_type"]})
+			if _interaction_history.size() > MAX_HISTORY:
+				_interaction_history.pop_front()
+		
+		print("[Girlfriend] Emitting mood_updated signal...")
+		print("[Girlfriend]   Mood: ", mood_name)
+		print("[Girlfriend]   Score: ", score)
+		mood_updated.emit(mood_name, score)
+		
+		# Now emit the NPC response that was waiting
+		if _waiting_for_mood and not _pending_response.is_empty():
+			print("[Girlfriend] 📤 Now displaying NPC response (synchronized with mood)")
+			npc_reply.emit(_pending_response)
+			_pending_response = ""
+			_waiting_for_mood = false
+		
+		print("[Girlfriend] ✅ Signal emitted successfully\n")
+
+func _on_mood_analysis_failed(error: String) -> void:
+	print("\n[Girlfriend] ❌ MOOD ANALYSIS FAILED:")
+	print("[Girlfriend] Error: ", error)
+	print("[Girlfriend] Check your API key and internet connection\n")
+	push_warning("[Girlfriend] Mood analysis failed: ", error)
+	
+	# Still emit the NPC response even if mood analysis failed
+	if _waiting_for_mood and not _pending_response.is_empty():
+		print("[Girlfriend] 📤 Displaying NPC response anyway (mood analysis failed)")
+		npc_reply.emit(_pending_response)
+		_pending_response = ""
+		_waiting_for_mood = false
 
 # =============================================================================
 # MOOD-AWARE SYSTEM
@@ -175,3 +299,46 @@ func _get_flags_status() -> String:
 	if completed.is_empty():
 		return "They haven't done anything helpful yet."
 	return "So far: " + ", ".join(completed)
+
+func _check_winning_sentence(normalized_input: String) -> bool:
+	"""Check if player input matches the next winning sentence in sequence"""
+	if _winning_sequence_progress >= WINNING_SENTENCES.size():
+		return false
+	
+	print("[Girlfriend] 🔍 Checking for sentence #", _winning_sequence_progress + 1, " of 4")
+	var expected_sentence = WINNING_SENTENCES[_winning_sequence_progress].to_lower().strip_edges()
+	
+	# Check for exact match
+	if normalized_input == expected_sentence:
+		print("[Girlfriend] ✅ EXACT MATCH for sentence ", _winning_sequence_progress + 1, "!")
+		_winning_sequence_progress += 1
+		return true
+	
+	# Check if it contains the key phrases (fuzzy match)
+	var key_phrases = [
+		["sorry", "made you worry", "my fault"],  # Sentence 1
+		["deserve", "better", "treated you"],  # Sentence 2
+		["promise", "call you", "comes up"],  # Sentence 3
+		["most important", "life", "love you"]  # Sentence 4
+	]
+	
+	if _winning_sequence_progress < key_phrases.size():
+		var required_phrases = key_phrases[_winning_sequence_progress]
+		var matches = 0
+		print("[Girlfriend] 🔎 Looking for key phrases: ", required_phrases)
+		for phrase in required_phrases:
+			if normalized_input.contains(phrase):
+				matches += 1
+				print("[Girlfriend]   ✓ Found: '", phrase, "'")
+			else:
+				print("[Girlfriend]   ✗ Missing: '", phrase, "'")
+		
+		print("[Girlfriend] 📊 Matches: ", matches, "/", required_phrases.size())
+		# If at least 2 out of 3 key phrases match, count it
+		if matches >= 2:
+			print("[Girlfriend] ✅ FUZZY MATCH for sentence ", _winning_sequence_progress + 1, "! (", matches, "/3 key phrases)")
+			_winning_sequence_progress += 1
+			return true
+	
+	print("[Girlfriend] ❌ No match for sentence ", _winning_sequence_progress + 1)
+	return false

@@ -5,6 +5,8 @@
 *.translation
 *.mono
 .mono/
+.env
+.env.*
 
 # Godot 4 cache
 .godot/
@@ -20,3 +22,11 @@ Thumbs.db
 # Build outputs
 bin/
 build/
+
+# API Keys and Secrets (NEVER COMMIT THESE!)
+*apikey*
+*api_key*
+*API_KEY*
+*.key
+secrets.txt
+api_config.txt

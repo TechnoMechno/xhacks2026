@@ -15,8 +15,13 @@ signal message_sent(text: String)
 @onready var send_button: TextureButton = $DialogueBox/SendButton
 @onready var mic_button: TextureButton = $DialogueBox/MicButton
 @onready var stt: Node = $Player2STT
+@onready var mood_label: Label = $Panel/VBox/MoodLabel
 
 var is_open: bool = false
+var is_recording: bool = false
+var current_mood: String = "Neutral"
+var current_score: int = 0
+var girlfriend_node: Node = null  # Reference to girlfriend
 
 # Portrait textures - preload all portraits
 var portraits = {
@@ -57,9 +62,55 @@ func _ready() -> void:
 	# Connect STT signals
 	if stt:
 		stt.stt_received.connect(_on_stt_received)
+		stt.stt_partial_received.connect(_on_stt_partial)
+		stt.listening_started.connect(_on_listening_started)
+		stt.listening_stopped.connect(_on_listening_stopped)
+		stt.stt_failed.connect(_on_stt_failed)
 	
 	# Connect visibility changed to handle portrait animation
 	visibility_changed.connect(_on_visibility_changed)
+	
+	# Connect to girlfriend if available
+	girlfriend_node = get_tree().get_first_node_in_group("girlfriend")
+	if girlfriend_node:
+		if girlfriend_node.has_signal("npc_reply"):
+			girlfriend_node.npc_reply.connect(_on_npc_reply)
+		if girlfriend_node.has_signal("npc_thinking"):
+			girlfriend_node.npc_thinking.connect(_on_npc_thinking)
+		if girlfriend_node.has_signal("mood_updated"):
+			girlfriend_node.mood_updated.connect(_on_mood_updated)
+
+func open_dialogue(girlfriend: Node) -> void:
+	girlfriend_node = girlfriend
+
+	# Connect to girlfriend signals if not already
+	if girlfriend_node:
+		if girlfriend_node.has_signal("npc_reply") and not girlfriend_node.npc_reply.is_connected(_on_npc_reply):
+			girlfriend_node.npc_reply.connect(_on_npc_reply)
+		if girlfriend_node.has_signal("npc_thinking") and not girlfriend_node.npc_thinking.is_connected(_on_npc_thinking):
+			girlfriend_node.npc_thinking.connect(_on_npc_thinking)
+		if girlfriend_node.has_signal("mood_updated") and not girlfriend_node.mood_updated.is_connected(_on_mood_updated):
+			girlfriend_node.mood_updated.connect(_on_mood_updated)
+
+	# Show and focus
+	visible = true
+	is_open = true
+	if input_box:
+		input_box.grab_focus()
+
+	# Clear previous conversation display
+	if response_area:
+		response_area.clear()
+		response_area.append_text("[color=gray]--- Conversation with Penny ---[/color]\n\n")
+
+	dialogue_opened.emit()
+
+func close_dialogue() -> void:
+	visible = false
+	is_open = false
+	if input_box:
+		input_box.clear()
+	dialogue_closed.emit()
 
 func _input(event: InputEvent) -> void:
 	# Close on Escape
@@ -95,11 +146,16 @@ func _send_message() -> void:
 		return
 
 	# Display player message in response area (each on new line)
-	response_area.append_text("[color=#8B4513]You:[/color] %s\n" % text)
+	if response_area:
+		response_area.append_text("[color=#8B4513]You:[/color] %s\n" % text)
 
-	# Scroll to bottom to show latest message
-	await get_tree().process_frame
-	response_area.scroll_to_line(response_area.get_line_count() - 1)
+		# Scroll to bottom to show latest message
+		await get_tree().process_frame
+		response_area.scroll_to_line(response_area.get_line_count() - 1)
+	
+	# Send to girlfriend
+	if girlfriend_node and girlfriend_node.has_method("receive_player_message"):
+		girlfriend_node.receive_player_message(text)
 
 	# Emit signal for game logic
 	message_sent.emit(text)
@@ -109,30 +165,48 @@ func _send_message() -> void:
 
 func add_npc_message(text: String) -> void:
 	# Display girlfriend's response
-	response_area.append_text("[color=#D2691E]Penny:[/color] %s\n" % text)
-	
-	# Scroll to bottom
-	await get_tree().process_frame
-	response_area.scroll_to_line(response_area.get_line_count() - 1)
+	if response_area:
+		response_area.append_text("[color=#D2691E]Penny:[/color] %s\n" % text)
+		
+		# Scroll to bottom
+		await get_tree().process_frame
+		response_area.scroll_to_line(response_area.get_line_count() - 1)
 
 func add_thinking_message() -> void:
 	# Display thinking indicator
-	response_area.append_text("[color=gray][Thinking...][/color]\n")
-	
-	# Scroll to bottom
-	await get_tree().process_frame
-	response_area.scroll_to_line(response_area.get_line_count() - 1)
+	if response_area:
+		response_area.append_text("[color=gray][Thinking...][/color]\n")
+		
+		# Scroll to bottom
+		await get_tree().process_frame
+		response_area.scroll_to_line(response_area.get_line_count() - 1)
+
+func _on_npc_reply(text: String) -> void:
+	# Parse JSON if needed (Player2AI returns JSON)
+	var display_text = _parse_response(text)
+	add_npc_message(display_text)
+
+func _on_npc_thinking() -> void:
+	add_thinking_message()
+
+func _parse_response(response: String) -> String:
+	var json = JSON.parse_string(response)
+	if json is Dictionary and json.has("reply"):
+		return json["reply"]
+	return response
 
 func _on_mic_button_down() -> void:
 	# Start recording when mic button is pressed
 	if stt and stt.has_method("start_stt"):
 		stt.start_stt()
+		is_recording = true
 		print("[DialogueUI] Started STT recording")
 
 func _on_mic_button_up() -> void:
 	# Stop recording when mic button is released
 	if stt and stt.has_method("stop_stt"):
 		stt.stop_stt()
+		is_recording = false
 		print("[DialogueUI] Stopped STT recording")
 
 func _on_stt_received(message: String) -> void:
@@ -142,6 +216,117 @@ func _on_stt_received(message: String) -> void:
 		print("[DialogueUI] STT received: ", message)
 		# Automatically send the message
 		_send_message()
+
+func _on_stt_partial(partial_text: String) -> void:
+	# Update input box with partial recognition
+	if input_box:
+		input_box.text = partial_text
+
+func _on_listening_started() -> void:
+	print("[DialogueUI] Listening started")
+	if input_box:
+		input_box.placeholder_text = "Listening..."
+
+func _on_listening_stopped() -> void:
+	print("[DialogueUI] Listening stopped")
+	if input_box:
+		input_box.placeholder_text = "Type your message..."
+
+func _on_stt_failed(message: String, code: int) -> void:
+	print("[DialogueUI] STT failed: ", message, " (code: ", code, ")")
+	is_recording = false
+	if input_box:
+		input_box.placeholder_text = "Type your message..."
+	if response_area:
+		response_area.append_text("[color=red](Voice input failed)[/color]\n")
+
+# =============================================================================
+# MOOD DISPLAY
+# =============================================================================
+
+func _on_mood_updated(mood_name: String, score: int) -> void:
+	print("\n[DialogueUI] 🎨 UPDATING MOOD DISPLAY:")
+	print("[DialogueUI]   Mood: ", mood_name)
+	print("[DialogueUI]   Score: ", score)
+	current_mood = mood_name
+	current_score = score
+	_update_mood_display()
+	# Update portrait to match mood
+	_update_portrait_for_mood(mood_name)
+	print("[DialogueUI] ✅ Display updated\n")
+
+func _update_mood_display() -> void:
+	if not mood_label:
+		return
+	
+	# Get color based on mood
+	var color = _get_mood_color(current_mood)
+	var emoji = _get_mood_emoji(current_mood)
+	
+	mood_label.text = "%s Mood: %s (Score: %d)" % [emoji, current_mood, current_score]
+	mood_label.add_theme_color_override("font_color", color)
+
+func _get_mood_color(mood: String) -> Color:
+	match mood.to_lower():
+		"happy":
+			return Color(0.2, 1.0, 0.2)  # Bright green
+		"soft smile":
+			return Color(0.5, 1.0, 0.5)  # Light green
+		"neutral":
+			return Color(0.8, 0.8, 0.8)  # Gray
+		"sad":
+			return Color(0.5, 0.5, 1.0)  # Light blue
+		"crying":
+			return Color(0.3, 0.3, 1.0)  # Blue
+		"angry":
+			return Color(1.0, 0.5, 0.0)  # Orange
+		"furious":
+			return Color(1.0, 0.0, 0.0)  # Red
+		_:
+			return Color.WHITE
+
+func _get_mood_emoji(mood: String) -> String:
+	match mood.to_lower():
+		"happy":
+			return "😊"
+		"soft smile":
+			return "🙂"
+		"neutral":
+			return "😐"
+		"sad":
+			return "😔"
+		"crying":
+			return "😢"
+		"angry":
+			return "😠"
+		"furious":
+			return "😡"
+		_:
+			return "💭"
+
+func _update_portrait_for_mood(mood_name: String) -> void:
+	"""Update portrait to match mood"""
+	var portrait_name = "neutral"
+	
+	# Map mood names to portrait expressions
+	match mood_name.to_lower():
+		"happy":
+			portrait_name = "happy"
+		"soft smile":
+			portrait_name = "soft_smile"
+		"neutral":
+			portrait_name = "neutral"
+		"sad":
+			portrait_name = "sad"
+		"crying":
+			portrait_name = "crying"
+		"angry":
+			portrait_name = "angry"
+		"furious":
+			portrait_name = "furious"
+	
+	# Change portrait with fade transition
+	change_portrait(portrait_name)
 
 # Portrait control functions
 func _set_portrait_for_current_mood() -> void:

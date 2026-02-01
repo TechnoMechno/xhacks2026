@@ -2,4 +2,4 @@
 
 [ext_resource type="PackedScene" uid="uid://5tdvp5lgxuea" path="res://addons/player2/templates/chat/chat_template.tscn" id="1_cdcc7"]
 
-[node name="Chat Template" unique_id=1365930306 instance=ExtResource("1_cdcc7")]
+[node name="Chat Template" unique_id=815582312 instance=ExtResource("1_cdcc7")]
