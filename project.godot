@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="AngryGirlFriend1"
-run/main_scene="uid://cwin_cutscene_001"
+run/main_scene="uid://b2dlswso0c1qf"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 

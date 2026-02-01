@@ -36,9 +36,17 @@ func _on_video_finished() -> void:
 		return
 	_finished = true
 	print("[LoseCutscene] Video finished")
+	
+	# Disconnect signal to prevent double-triggering
+	if video_player and video_player.finished.is_connected(_on_video_finished):
+		video_player.finished.disconnect(_on_video_finished)
+	
+	# Hide video player instead of stopping (safer on Mac)
 	if video_player:
-		video_player.stop()
+		video_player.visible = false
+	
 	cutscene_finished.emit()
-	# Go directly to menu
+	
+	# Use deferred call to change scene safely
 	GameState.change_state(GameState.State.MENU)
-	get_tree().change_scene_to_file("res://Scenes/ui/menu.tscn")
+	get_tree().call_deferred("change_scene_to_file", "res://Scenes/ui/menu.tscn")
