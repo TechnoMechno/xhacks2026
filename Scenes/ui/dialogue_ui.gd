@@ -16,10 +16,13 @@ signal message_sent(text: String)
 @onready var send_button: Button = $Panel/VBox/InputRow/SendBtn
 @onready var close_button: Button = $Panel/VBox/CloseBtn
 @onready var stt: Node = $Player2STT
+@onready var mood_label: Label = $Panel/VBox/MoodLabel
 
 var girlfriend_node: Node = null
 var is_open: bool = false
 var is_recording: bool = false
+var current_mood: String = "Neutral"
+var current_score: int = 0
 
 func _ready() -> void:
 	# Connect UI signals
@@ -51,6 +54,10 @@ func open_dialogue(girlfriend: Node) -> void:
 			girlfriend_node.npc_reply.connect(_on_npc_reply)
 		if girlfriend_node.has_signal("npc_thinking") and not girlfriend_node.npc_thinking.is_connected(_on_npc_thinking):
 			girlfriend_node.npc_thinking.connect(_on_npc_thinking)
+		if girlfriend_node.has_signal("mood_updated") and not girlfriend_node.mood_updated.is_connected(_on_mood_updated):
+			girlfriend_node.mood_updated.connect(_on_mood_updated)
+		if girlfriend_node.has_signal("mood_updated") and not girlfriend_node.mood_updated.is_connected(_on_mood_updated):
+			girlfriend_node.mood_updated.connect(_on_mood_updated)
 
 	# Show and focus
 	panel.visible = true
@@ -178,3 +185,65 @@ func _on_stt_failed(message: String, code: int) -> void:
 	input_field.placeholder_text = "Type your message..."
 	history.append_text("[color=red](Voice input failed)[/color]\n")
 	_scroll_to_bottom()
+
+# =============================================================================
+# MOOD DISPLAY
+# =============================================================================
+
+func _on_mood_updated(mood_name: String, score: int) -> void:
+	print("\n[DialogueUI] 🎨 UPDATING MOOD DISPLAY:")
+	print("[DialogueUI]   Mood: ", mood_name)
+	print("[DialogueUI]   Score: ", score)
+	current_mood = mood_name
+	current_score = score
+	_update_mood_display()
+	print("[DialogueUI] ✅ Display updated\n")
+
+func _update_mood_display() -> void:
+	if not mood_label:
+		return
+	
+	# Get color based on mood
+	var color = _get_mood_color(current_mood)
+	var emoji = _get_mood_emoji(current_mood)
+	
+	mood_label.text = "%s Mood: %s (Score: %d)" % [emoji, current_mood, current_score]
+	mood_label.add_theme_color_override("font_color", color)
+
+func _get_mood_color(mood: String) -> Color:
+	match mood.to_lower():
+		"happy":
+			return Color(0.2, 1.0, 0.2)  # Bright green
+		"soft smile":
+			return Color(0.5, 1.0, 0.5)  # Light green
+		"neutral":
+			return Color(0.8, 0.8, 0.8)  # Gray
+		"sad":
+			return Color(0.5, 0.5, 1.0)  # Light blue
+		"crying":
+			return Color(0.3, 0.3, 1.0)  # Blue
+		"angry":
+			return Color(1.0, 0.5, 0.0)  # Orange
+		"furious":
+			return Color(1.0, 0.0, 0.0)  # Red
+		_:
+			return Color.WHITE
+
+func _get_mood_emoji(mood: String) -> String:
+	match mood.to_lower():
+		"happy":
+			return "😊"
+		"soft smile":
+			return "🙂"
+		"neutral":
+			return "😐"
+		"sad":
+			return "😔"
+		"crying":
+			return "😢"
+		"angry":
+			return "😠"
+		"furious":
+			return "😡"
+		_:
+			return "💭"

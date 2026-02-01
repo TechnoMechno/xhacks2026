@@ -21,7 +21,7 @@ const MOOD_WIN_THRESHOLD = 80
 const MOOD_LOSE_THRESHOLD = 0
 
 # Mood ranges from 0 (very angry) to 100 (happy)
-var mood: int = 50
+var mood: int = 50  # Starting relationship score
 
 # Game flags
 var flags: Dictionary = {

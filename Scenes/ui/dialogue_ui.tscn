@@ -22,6 +22,12 @@ grow_vertical = 0
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
 
+[node name="MoodLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "💭 Mood: Unknown"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="History" type="RichTextLabel" parent="Panel/VBox"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
