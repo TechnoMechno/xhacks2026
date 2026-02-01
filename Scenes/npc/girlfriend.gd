@@ -6,6 +6,22 @@ signal interaction_requested  # Emitted when player wants to talk
 
 const SPEED = 40.0
 
+const MOOD_TIER_PROMPTS = {
+	0: "You're furious and done. You're considering ending this relationship. Sharp, cold responses only.",
+	10: "You're extremely angry. Sarcastic and harsh. They need to prove they care.",
+	20: "You're very upset. Demanding real effort and sincerity. No excuses accepted.",
+	30: "You're angry but listening. They need to show genuine remorse and action.",
+	40: "You're hurt but engaging. Starting to calm down if they keep trying.",
+	50: "You're conflicted. Part of you wants to forgive, part is still hurt.",
+	60: "You're calming down. Their efforts are working. Still cautious.",
+	70: "You're warming up. You appreciate their effort and feel hopeful.",
+	80: "You're happy. The fight is mostly resolved. Feeling reconnected.",
+	90: "You feel loved and appreciated. Warm, affectionate responses.",
+	100: "Pure happiness. You're completely over the fight and feel closer than ever."
+}
+
+var _last_mood_tier: int = -1
+
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var ai_npc: Node = $Player2AINPC
 
@@ -20,8 +36,10 @@ func _physics_process(_delta: float) -> void:
 
 func interact() -> void:
 	# Called when player interacts with girlfriend
-	# Can trigger dialogue or other interactions
-	pass
+	# Emit signal to trigger dialogue
+	print("[Girlfriend] interact() called")
+	interaction_requested.emit()
+	print("[Girlfriend] interaction_requested signal emitted")
 
 func receive_player_message(text: String) -> void:
 	# Classify intent
@@ -36,6 +54,7 @@ func receive_player_message(text: String) -> void:
 		# Inject world status via notify (as stimuli) before the chat
 		# This ensures the LLM sees the current game state
 		if ai_npc.has_method("notify"):
+			var world_status = _build_world_status()
 			ai_npc.notify(world_status, true)  # silent = true, don't trigger response
 
 		if ai_npc.has_method("chat"):

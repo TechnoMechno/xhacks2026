@@ -18,6 +18,12 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameState="*uid://v1y4pxfgsb0o"
+Player2AsyncHelper="*uid://dvrhlfnm041m4"
+Player2ErrorHelper="*uid://dmbaq0aasr5kt"
+Player2WebHelper="*uid://dnlfee00wl7jb"
+Player2AuthHelper="*uid://dt0p7yaopsgr8"
+Player2APISourceHelper="*uid://c3qd7pyhp8whk"
+Player2API="*uid://ds84b57fgfbrm"
 
 [display]
 

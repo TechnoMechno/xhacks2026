@@ -1,7 +1,12 @@
 [gd_scene format=3 uid="uid://dqcc5hm1qeadg"]
 
 [ext_resource type="Texture2D" uid="uid://qqmvcp417vf8" path="res://Assets/Girlfriend/haley.png" id="1_646qc"]
-[ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="1_cnwi5"]
+[ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="2_gf_brain"]
+[ext_resource type="Script" uid="uid://bupnh0kqklshe" path="res://addons/player2/nodes/Player2AINPC.gd" id="3_player2npc"]
+[ext_resource type="Script" uid="uid://dt7mt3t7a08me" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinitions.gd" id="5_d4t3a"]
+[ext_resource type="Script" uid="uid://bsi5tjg54www7" path="res://addons/player2/helpers/config/Player2AICharacterConfig.gd" id="6_rsfka"]
+[ext_resource type="Script" uid="uid://mt8gdygmb5og" path="res://addons/player2/helpers/config/Player2TTSConfig.gd" id="7_5y75h"]
+[ext_resource type="Resource" uid="uid://das4ap6qvtr75" path="res://addons/player2/chat_config.tres" id="8_kedoj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
 atlas = ExtResource("1_646qc")
@@ -39,9 +44,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=888624562]
-script = ExtResource("1_cnwi5")
-
 [sub_resource type="Resource" id="Resource_3a6l0"]
 Resource = null
 resource_path = "res://Scenes/Girlfriend.tscn::Resource_3a6l0"
@@ -57,22 +59,24 @@ voice_id = "01955d76-ed5b-7426-8748-4b0e5aea1974"
 script = ExtResource("6_rsfka")
 tts = SubResource("Resource_m4t7l")
 
-[node name="Girlfriend" type="Node2D" unique_id=586313670 groups=["girlfriend"]]
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 20.0
+
+[node name="Girlfriend" type="CharacterBody2D" unique_id=586313670 groups=["girlfriend"]]
 script = ExtResource("2_gf_brain")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1140675579]
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1221460206]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1221460206]
 sprite_frames = SubResource("SpriteFrames_yyaj3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=27034515]
-
-[node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=612790088]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D" unique_id=338470483]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=27034515]
 shape = SubResource("CircleShape2D_interact")
 
-[node name="Marker2D" type="Marker2D" parent="CharacterBody2D" unique_id=1530081386]
+[node name="Area2D" type="Area2D" parent="." unique_id=612790088]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=338470483]
+shape = SubResource("CircleShape2D_interact")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1530081386]
 
 [node name="Player2AINPC" type="Node" parent="." unique_id=1491766248]
 script = ExtResource("3_player2npc")

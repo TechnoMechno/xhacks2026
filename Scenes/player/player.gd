@@ -42,19 +42,25 @@ func _update_animation(direction: Vector2) -> void:
 		anim.play(anim_name)
 
 func _on_body_entered(body: Node2D) -> void:
+	print("[Player] Body entered: ", body.name, " has interact: ", body.has_method("interact"))
 	if body.has_method("interact") and body not in nearby_interactables:
 		nearby_interactables.append(body)
+		print("[Player] Added to nearby_interactables: ", body.name)
 
 func _on_body_exited(body: Node2D) -> void:
+	print("[Player] Body exited: ", body.name)
 	if body in nearby_interactables:
 		nearby_interactables.erase(body)
 
 func _on_area_entered(area: Area2D) -> void:
+	print("[Player] Area entered: ", area.name)
 	var interactable = _find_interactable(area)
 	if interactable and interactable not in nearby_interactables:
 		nearby_interactables.append(interactable)
+		print("[Player] Added interactable from area: ", interactable.name)
 
 func _on_area_exited(area: Area2D) -> void:
+	print("[Player] Area exited: ", area.name)
 	var interactable = _find_interactable(area)
 	if interactable in nearby_interactables:
 		nearby_interactables.erase(interactable)
@@ -69,7 +75,9 @@ func _find_interactable(node: Node) -> Node:
 	return null
 
 func _interact_with_closest() -> void:
+	print("[Player] Spacebar pressed, nearby_interactables: ", nearby_interactables.size())
 	if nearby_interactables.is_empty():
+		print("[Player] No nearby interactables")
 		return
 
 	var closest = nearby_interactables[0]
@@ -81,4 +89,5 @@ func _interact_with_closest() -> void:
 			closest = interactable
 			closest_dist = dist
 
+	print("[Player] Interacting with: ", closest.name)
 	closest.interact()
