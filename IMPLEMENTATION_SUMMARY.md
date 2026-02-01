@@ -10,11 +10,11 @@ A top-down narrative game where the player must win back their angry girlfriend 
 ```
 Player enters house
     → Girlfriend speaks (LLM response)
-    → Player types message OR performs action
+    → Player types message OR speaks (voice input)
     → Intent classified → Mood changes
     → System prompt updated if mood tier changed
     → LLM receives world_status context
-    → Girlfriend responds based on mood
+    → Girlfriend responds based on mood (text + TTS)
     → Repeat until Win (mood >= 80) or Lose (mood <= 0)
 ```
 
@@ -102,8 +102,8 @@ Scenes/
     player.gd            # Movement, interaction detection
 
   ui/
-    dialogue_ui.tscn     # Chat UI
-    dialogue_ui.gd       # Input handling, message display
+    dialogue_ui.tscn     # Chat UI with Player2STT for voice input
+    dialogue_ui.gd       # Text/voice input handling, message display
 
   testing/
     npc_chat_test.gd     # Console-based test system
@@ -149,14 +149,16 @@ Mood reaches threshold
 
 ---
 
-## Debug Controls
+## Controls
 
-| Key | Action |
-|-----|--------|
-| TAB | Reset conversation history |
+| Key/Action | Description |
+|------------|-------------|
 | WASD/Arrows | Move player |
 | Enter/Space | Interact with NPC |
 | Esc | Close dialogue |
+| TAB | Reset conversation history (debug) |
+| 🎤 Button (hold) | Push-to-talk voice input |
+| Type + Send | Text input |
 
 Console commands (test scene only):
 - `mood` - Show current mood
@@ -174,10 +176,17 @@ Console commands (test scene only):
 - `character_system_message`: Dynamic (updated by girlfriend.gd)
 - `auto_store_conversation_history`: true (can be reset with TAB)
 
-### TTS Configuration
+### TTS Configuration (Text-to-Speech)
 - Voice ID configured in Character Config
 - `tts_speed`: 1.1
 - `tts_default_gender`: female
+
+### STT Configuration (Speech-to-Text / Voice Input)
+- Player2STT node in `dialogue_ui.tscn`
+- Push-to-talk: Hold the 🎤 button to speak
+- Transcribed text auto-sends to girlfriend
+- Requires microphone permission enabled in Project Settings:
+  - `Project → Project Settings → Audio → Driver → Enable Input`
 
 ---
 
@@ -196,13 +205,15 @@ Or in Godot Editor:
 - [ ] All files saved
 - [ ] Test player movement
 - [ ] Test NPC interaction (walk up, press Enter)
-- [ ] Test dialogue sends/receives
+- [ ] Test dialogue sends/receives (text input)
+- [ ] Test voice input (hold 🎤 button, speak, release)
 - [ ] Test mood changes appear in console
 - [ ] Test mood tier prompt updates
 - [ ] Test win condition (mood >= 80)
 - [ ] Test lose condition (mood <= 0)
 - [ ] Test conversation reset (TAB key)
 - [ ] Verify TTS works (if enabled)
+- [ ] Verify STT works (requires microphone permission)
 
 ---
 

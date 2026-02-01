@@ -2,6 +2,7 @@ extends CanvasLayer
 
 # Simple Dialogue UI - placeholder for future implementation
 # Shows chat history and input field
+# Supports both text and voice input via Player2STT
 # Can be easily replaced with a better UI later
 
 signal dialogue_opened
@@ -11,17 +12,32 @@ signal message_sent(text: String)
 @onready var panel: PanelContainer = $Panel
 @onready var history: RichTextLabel = $Panel/VBox/History
 @onready var input_field: LineEdit = $Panel/VBox/InputRow/Input
+@onready var mic_button: Button = $Panel/VBox/InputRow/MicBtn
 @onready var send_button: Button = $Panel/VBox/InputRow/SendBtn
 @onready var close_button: Button = $Panel/VBox/CloseBtn
+@onready var stt: Node = $Player2STT
 
 var girlfriend_node: Node = null
 var is_open: bool = false
+var is_recording: bool = false
 
 func _ready() -> void:
 	# Connect UI signals
 	send_button.pressed.connect(_on_send_pressed)
 	input_field.text_submitted.connect(_on_text_submitted)
 	close_button.pressed.connect(close_dialogue)
+
+	# Connect mic button for push-to-talk
+	mic_button.button_down.connect(_on_mic_button_down)
+	mic_button.button_up.connect(_on_mic_button_up)
+
+	# Connect STT signals
+	if stt:
+		stt.stt_received.connect(_on_stt_received)
+		stt.stt_partial_received.connect(_on_stt_partial)
+		stt.listening_started.connect(_on_listening_started)
+		stt.listening_stopped.connect(_on_listening_stopped)
+		stt.stt_failed.connect(_on_stt_failed)
 
 	# Start hidden
 	panel.visible = false
@@ -102,3 +118,63 @@ func _input(event: InputEvent) -> void:
 	# Close on Escape
 	if is_open and event.is_action_pressed("ui_cancel"):
 		close_dialogue()
+
+# =============================================================================
+# VOICE INPUT (Push-to-Talk)
+# =============================================================================
+
+func _on_mic_button_down() -> void:
+	if not is_open or not stt:
+		return
+	print("[DialogueUI] Starting voice recording...")
+	stt.start_stt()
+	is_recording = true
+	mic_button.text = "🔴"
+	input_field.placeholder_text = "Listening..."
+
+func _on_mic_button_up() -> void:
+	if not stt or not is_recording:
+		return
+	print("[DialogueUI] Stopping voice recording...")
+	stt.stop_stt()
+
+func _on_listening_started() -> void:
+	print("[DialogueUI] STT listening started")
+	history.append_text("[color=gray](Listening...)[/color]\n")
+	_scroll_to_bottom()
+
+func _on_listening_stopped() -> void:
+	print("[DialogueUI] STT listening stopped")
+	is_recording = false
+	mic_button.text = "🎤"
+	mic_button.button_pressed = false
+	input_field.placeholder_text = "Type your message..."
+
+func _on_stt_partial(partial_text: String) -> void:
+	# Show partial transcription in the input field as preview
+	input_field.text = partial_text
+
+func _on_stt_received(text: String) -> void:
+	print("[DialogueUI] STT received: ", text)
+	is_recording = false
+	mic_button.text = "🎤"
+	mic_button.button_pressed = false
+	input_field.placeholder_text = "Type your message..."
+
+	if text.strip_edges().is_empty():
+		history.append_text("[color=gray](No speech detected)[/color]\n")
+		_scroll_to_bottom()
+		return
+
+	# Put the transcribed text in the input field and send it
+	input_field.text = text
+	_send_message()
+
+func _on_stt_failed(message: String, code: int) -> void:
+	print("[DialogueUI] STT failed: ", message, " (code: ", code, ")")
+	is_recording = false
+	mic_button.text = "🎤"
+	mic_button.button_pressed = false
+	input_field.placeholder_text = "Type your message..."
+	history.append_text("[color=red](Voice input failed)[/color]\n")
+	_scroll_to_bottom()

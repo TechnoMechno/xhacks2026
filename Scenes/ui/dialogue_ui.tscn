@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://dialogue_ui_simple"]
 
 [ext_resource type="Script" path="res://Scenes/ui/dialogue_ui.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dj8gvq0vq1bqo" path="res://addons/player2/nodes/Player2STT.gd" id="2_stt"]
 
 [node name="DialogueUI" type="CanvasLayer"]
 layer = 10
 script = ExtResource("1_script")
+
+[node name="Player2STT" type="Node" parent="."]
+script = ExtResource("2_stt")
 
 [node name="Panel" type="PanelContainer" parent="."]
 anchors_preset = 12
@@ -31,6 +35,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Type your message..."
+
+[node name="MicBtn" type="Button" parent="Panel/VBox/InputRow"]
+layout_mode = 2
+toggle_mode = true
+text = "🎤"
+tooltip_text = "Hold to speak"
 
 [node name="SendBtn" type="Button" parent="Panel/VBox/InputRow"]
 layout_mode = 2
