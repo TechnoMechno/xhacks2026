@@ -70,8 +70,14 @@ func set_mood(new_mood: int) -> void:
 	mood = clamp(new_mood, 0, 100)
 	var delta = mood - old_mood
 	print("[MOOD] %s" % _get_mood_bar(old_mood, delta))
-	print("[GameState] Emitting mood_changed signal with value: ", mood)
+	print("[GameState] ====== EMITTING mood_changed signal ======")
+	print("[GameState] New mood value: ", mood)
+	var connections = mood_changed.get_connections()
+	print("[GameState] Signal has ", connections.size(), " listener(s)")
+	for conn in connections:
+		print("[GameState]   -> ", conn.callable)
 	mood_changed.emit(mood)
+	print("[GameState] ====== Signal emitted ======")
 	_check_win_lose()
 
 func _get_mood_bar(old_mood: int, delta: int) -> String:

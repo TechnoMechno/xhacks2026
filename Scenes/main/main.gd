@@ -6,6 +6,7 @@ extends Node2D
 @onready var girlfriend: CharacterBody2D = $girlfriend
 @onready var dialogue_ui: CanvasLayer = $DialogueUI
 @onready var phone_ui = $HUD/Phone
+@onready var music_player: AudioStreamPlayer = $MusicPlayer
 
 @onready var end_screen = $HUD/EndScreen
 
@@ -15,6 +16,11 @@ func _ready() -> void:
 	print("[Main] _ready() called")
 	print("[Main] girlfriend = ", girlfriend)
 	print("[Main] dialogue_ui = ", dialogue_ui)
+
+	# Setup music looping
+	if music_player:
+		music_player.finished.connect(_on_music_finished)
+		print("[Main] Music player connected for looping")
 
 	# Hide Player2 PowerHUD if it exists
 	_hide_power_hud()
@@ -75,10 +81,25 @@ func _on_dialogue_closed() -> void:
 		player.set_physics_process(true)
 
 func _on_game_won() -> void:
+	# Stop music before cutscene
+	_stop_music()
 	end_screen.show_result(true)
 
 func _on_game_lost() -> void:
+	# Stop music before cutscene
+	_stop_music()
 	end_screen.show_result(false)
+
+func _on_music_finished() -> void:
+	# Loop the music by playing it again
+	if music_player:
+		music_player.play()
+		print("[Main] Music looped")
+
+func _stop_music() -> void:
+	if music_player:
+		music_player.stop()
+		print("[Main] Music stopped for cutscene")
 
 func _hide_power_hud() -> void:
 	# Find and hide the Player2 PowerHUD

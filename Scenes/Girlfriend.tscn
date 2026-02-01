@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="2_gf_brain"]
 [ext_resource type="Script" uid="uid://bupnh0kqklshe" path="res://addons/player2/nodes/Player2AINPC.gd" id="3_player2npc"]
 [ext_resource type="Script" uid="uid://fpb2ysodtcuy" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinition.gd" id="4_ebojb"]
-[ext_resource type="Script" path="res://systems/mood_analyzer.gd" id="4_mood_analyzer"]
+[ext_resource type="Script" uid="uid://8byjq4hj2ws8" path="res://systems/mood_analyzer.gd" id="4_mood_analyzer"]
 [ext_resource type="Script" uid="uid://dt7mt3t7a08me" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinitions.gd" id="5_d4t3a"]
 [ext_resource type="Script" uid="uid://bsi5tjg54www7" path="res://addons/player2/helpers/config/Player2AICharacterConfig.gd" id="6_rsfka"]
 [ext_resource type="Script" uid="uid://mt8gdygmb5og" path="res://addons/player2/helpers/config/Player2TTSConfig.gd" id="7_5y75h"]

@@ -13,6 +13,9 @@ func _ready() -> void:
 		detect_area.body_exited.connect(_on_body_exited)
 		detect_area.area_entered.connect(_on_area_entered)
 		detect_area.area_exited.connect(_on_area_exited)
+	if anim:
+		anim.play("walk_right")
+		anim.stop()
 
 func _physics_process(_delta: float) -> void:
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -29,7 +32,9 @@ func _update_animation(direction: Vector2) -> void:
 		return
 
 	var is_moving = direction.length() > 0.01
-	var base = "walk_" if is_moving else "idle_"
+	if not is_moving:
+		anim.pause()
+		return
 
 	var dir_name = "down"
 	if abs(direction.x) > abs(direction.y):
@@ -37,9 +42,12 @@ func _update_animation(direction: Vector2) -> void:
 	elif direction.length() > 0:
 		dir_name = "down" if direction.y > 0 else "up"
 
-	var anim_name = base + dir_name
-	if anim.sprite_frames.has_animation(anim_name) and anim.animation != anim_name:
-		anim.play(anim_name)
+	var anim_name = "walk_" + dir_name
+	if anim.sprite_frames.has_animation(anim_name):
+		if anim.animation != anim_name:
+			anim.play(anim_name)
+		elif not anim.is_playing():
+			anim.play()
 
 func _on_body_entered(body: Node2D) -> void:
 	print("[Player] Body entered: ", body.name, " has interact: ", body.has_method("interact"))

@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://cyr60caagweiy"]
+[gd_scene format=3 uid="uid://hyrn8fyfi6s"]
 
 [ext_resource type="Script" uid="uid://c7e2dndhnkic2" path="res://Scenes/ui/menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://drhhwp85se5ui" path="res://Assets/background.jpg" id="2_xulg5"]
 
 [node name="Menu" type="Control" unique_id=1937416644]
 layout_mode = 3
@@ -11,13 +12,28 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=192948416]
+z_index = -1
+layout_mode = 0
+offset_left = -3.000002
+offset_top = -6.0
+offset_right = 6216.0
+offset_bottom = 3492.0
+scale = Vector2(0.23778725, 0.25915474)
+texture = ExtResource("2_xulg5")
+
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=479385661]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -726.0
+offset_top = -468.0
+offset_right = -726.0
+offset_bottom = -468.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=150332177]
 layout_mode = 2

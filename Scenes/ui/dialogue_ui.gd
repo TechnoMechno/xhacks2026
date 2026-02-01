@@ -15,7 +15,8 @@ signal message_sent(text: String)
 @onready var send_button: TextureButton = $DialogueBox/SendButton
 @onready var mic_button: TextureButton = $DialogueBox/MicButton
 @onready var stt: Node = $Player2STT
-@onready var mood_label: Label = $Panel/VBox/MoodLabel
+# Note: mood_label removed - mood is shown via the MoodBar instead
+var mood_label: Label = null  # Kept as null to avoid errors in _update_mood_display
 
 var is_open: bool = false
 var is_recording: bool = false
@@ -91,7 +92,7 @@ func open_dialogue(girlfriend: Node) -> void:
 	# Clear previous conversation display
 	if response_area:
 		response_area.clear()
-		response_area.append_text("[color=gray]--- Conversation with Penny ---[/color]\n\n")
+		response_area.append_text("\n[color=gray]--- Conversation with Penny ---[/color]\n\n")
 
 	dialogue_opened.emit()
 
@@ -157,19 +158,19 @@ func add_npc_message(text: String) -> void:
 	# Display girlfriend's response
 	if response_area:
 		response_area.append_text("[color=#D2691E]Penny:[/color] %s\n" % text)
-		
-		# Scroll to bottom
+
+		# Scroll to bottom (check if still in tree before awaiting)
+		if not is_inside_tree():
+			return
 		await get_tree().process_frame
+		# Check again after await in case scene changed
+		if not is_inside_tree() or not response_area:
+			return
 		response_area.scroll_to_line(response_area.get_line_count() - 1)
 
 func add_thinking_message() -> void:
-	# Display thinking indicator
-	if response_area:
-		response_area.append_text("[color=gray][Thinking...][/color]\n")
-		
-		# Scroll to bottom
-		await get_tree().process_frame
-		response_area.scroll_to_line(response_area.get_line_count() - 1)
+	# Removed - no longer showing [Thinking...] text to avoid duplication
+	pass
 
 func _on_npc_reply(text: String) -> void:
 	# Parse JSON if needed (Player2AI returns JSON)
