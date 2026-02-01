@@ -107,9 +107,16 @@ func _on_chat_received(response: String) -> void:
 
 func _parse_dialogue(response: String) -> String:
 	"""Extract clean dialogue text from response"""
+	# Handle empty responses
+	if response.is_empty():
+		return ""
+	
+	# Try to parse as JSON - wrap in try-catch equivalent
 	var json = JSON.parse_string(response)
-	if json is Dictionary and json.has("reply"):
+	if json != null and json is Dictionary and json.has("reply"):
 		return json["reply"]
+	
+	# If JSON parsing failed or no reply field, return original text
 	return response
 
 func _on_mood_analyzed(mood_data: Dictionary) -> void:
