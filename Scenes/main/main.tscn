@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://cm0itv8s4e3ns" path="res://Scenes/player/Player.tscn" id="2_w1fgp"]
 [ext_resource type="PackedScene" uid="uid://dqcc5hm1qeadg" path="res://Scenes/Girlfriend.tscn" id="3_4etoo"]
 [ext_resource type="Script" uid="uid://tl8gyho71fuh" path="res://Scenes/main/main.gd" id="4_main"]
-#[ext_resource type="PackedScene" path="res://Scenes/ui/dialogue_ui.tscn" id="5_dialogue"]
 
 [node name="Main" type="Node2D" unique_id=1515818718]
 script = ExtResource("4_main")
@@ -23,5 +22,3 @@ position = Vector2(316, 199)
 position = Vector2(145, 200)
 
 [node name="HUD" parent="." unique_id=1501745251]
-
-#[node name="DialogueUI" parent="." unique_id=1612425878 instance=ExtResource("5_dialogue")]
