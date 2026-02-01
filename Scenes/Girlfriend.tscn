@@ -91,4 +91,4 @@ chat_config = ExtResource("8_kedoj")
 
 [node name="MoodAnalyzer" type="Node" parent="." unique_id=1441750762]
 script = ExtResource("4_mood_analyzer")
-api_key = "REMOVED_API_KEY"
+api_key = ""
