@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1342ksbiotm2"
-path="res://.godot/imported/trans back.png-3a8f2cc2094ea9f81370fc85d633e93a.ctex"
+uid="uid://c37ni610aov6t"
+path="res://.godot/imported/chat_example.png-b566d19b35bb854b9f25fd83795274fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Girlfriend/trans back.png"
-dest_files=["res://.godot/imported/trans back.png-3a8f2cc2094ea9f81370fc85d633e93a.ctex"]
+source_file="res://addons/player2/ui/texture/chat_example.png"
+dest_files=["res://.godot/imported/chat_example.png-b566d19b35bb854b9f25fd83795274fc.ctex"]
 
 [params]
 

@@ -27,6 +27,10 @@ window/size/window_width_override=1980
 window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/player2/plugin.cfg")
+
 [input]
 
 ui_accept={
@@ -73,6 +77,11 @@ ui_down={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+
+[player2]
+
+hide_opening_prompt=false
+client_id="019c15d2-bf7c-7928-9c9a-87665310e6ad"
 
 [rendering]
 

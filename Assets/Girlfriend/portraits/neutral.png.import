@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bc6on3sjo1bxb"
-path="res://.godot/imported/Adobe Express - file.png-5a6e536e89b1b8cf69a75e7a350609fd.ctex"
+uid="uid://cyn8orpikd4jf"
+path="res://.godot/imported/neutral.png-0bb177e66e8f09fe8ad85a98b6290db7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Girlfriend/Adobe Express - file.png"
-dest_files=["res://.godot/imported/Adobe Express - file.png-5a6e536e89b1b8cf69a75e7a350609fd.ctex"]
+source_file="res://Assets/Girlfriend/portraits/neutral.png"
+dest_files=["res://.godot/imported/neutral.png-0bb177e66e8f09fe8ad85a98b6290db7.ctex"]
 
 [params]
 

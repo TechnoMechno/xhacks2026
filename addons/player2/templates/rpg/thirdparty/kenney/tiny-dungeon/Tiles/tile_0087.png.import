@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cosrueuqe8ymy"
-path="res://.godot/imported/lower res gf.png-4916c1e044ca838821980bbf5756d9b3.ctex"
+uid="uid://coewpv6e1i60y"
+path="res://.godot/imported/tile_0087.png-71d51030c11f06dd1189e0ed3ca3265a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Girlfriend/lower res gf.png"
-dest_files=["res://.godot/imported/lower res gf.png-4916c1e044ca838821980bbf5756d9b3.ctex"]
+source_file="res://addons/player2/templates/rpg/thirdparty/kenney/tiny-dungeon/Tiles/tile_0087.png"
+dest_files=["res://.godot/imported/tile_0087.png-71d51030c11f06dd1189e0ed3ca3265a.ctex"]
 
 [params]
 
