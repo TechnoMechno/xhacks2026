@@ -15,12 +15,15 @@ position = Vector2(720, 450)
 
 [node name="world" parent="." unique_id=1788772691 instance=ExtResource("1_b20jg")]
 position = Vector2(186, 188)
+scale = Vector2(3, 3)
 
 [node name="girlfriend" parent="." unique_id=888624562 instance=ExtResource("3_4etoo")]
 position = Vector2(316, 199)
+scale = Vector2(3, 3)
 
 [node name="player" parent="." unique_id=471510802 instance=ExtResource("2_w1fgp")]
 position = Vector2(145, 200)
+scale = Vector2(3, 3)
 
 [node name="HUD" parent="." unique_id=1501745251 instance=ExtResource("1_yqbfl")]
 

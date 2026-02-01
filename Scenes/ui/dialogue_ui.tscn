@@ -19,6 +19,7 @@ script = ExtResource("1_script")
 script = ExtResource("2_stt")
 
 [node name="Background" type="ColorRect" parent="." unique_id=493753084]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
