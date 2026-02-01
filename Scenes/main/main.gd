@@ -4,17 +4,17 @@ extends Node2D
 
 @onready var player: CharacterBody2D = $player
 @onready var girlfriend: CharacterBody2D = $girlfriend
-@onready var dialogue_ui: CanvasLayer = $DialogueUI
-@onready var phone_ui = $HUD/Phone
+#@onready var dialogue_ui: CanvasLayer = $DialogueUI
+#@onready var phone_ui = $HUD/Phone
 
-@onready var end_screen = $HUD/EndScreen
+#@onready var end_screen = $HUD/EndScreen
 
 var power_hud: Node = null
 
 func _ready() -> void:
 	print("[Main] _ready() called")
 	print("[Main] girlfriend = ", girlfriend)
-	print("[Main] dialogue_ui = ", dialogue_ui)
+	#print("[Main] dialogue_ui = ", dialogue_ui)
 
 	# Hide Player2 PowerHUD if it exists
 	_hide_power_hud()
@@ -31,21 +31,21 @@ func _ready() -> void:
 		print("[Main] ERROR: girlfriend is null!")
 
 	# Wire dialogue open/close to player freeze
-	if dialogue_ui:
-		dialogue_ui.dialogue_opened.connect(_on_dialogue_opened)
-		dialogue_ui.dialogue_closed.connect(_on_dialogue_closed)
-		print("[Main] Connected to dialogue_ui signals")
-	else:
-		print("[Main] ERROR: dialogue_ui is null!")
+	#if dialogue_ui:
+	#	dialogue_ui.dialogue_opened.connect(_on_dialogue_opened)
+	#	dialogue_ui.dialogue_closed.connect(_on_dialogue_closed)
+	#	print("[Main] Connected to dialogue_ui signals")
+	#else:
+	#	print("[Main] ERROR: dialogue_ui is null!")
 
 func _on_girlfriend_interaction() -> void:
 	# Open dialogue with Penny
 	print("[Main] _on_girlfriend_interaction() called")
-	if dialogue_ui:
-		print("[Main] Calling dialogue_ui.open_dialogue()")
-		dialogue_ui.open_dialogue(girlfriend)
-	else:
-		print("[Main] ERROR: dialogue_ui is null in interaction handler!")
+	#if dialogue_ui:
+	#	print("[Main] Calling dialogue_ui.open_dialogue()")
+	#	dialogue_ui.open_dialogue(girlfriend)
+	#else:
+	#	print("[Main] ERROR: dialogue_ui is null in interaction handler!")
 
 func _on_dialogue_opened() -> void:
 	# Freeze player
@@ -58,10 +58,12 @@ func _on_dialogue_closed() -> void:
 		player.set_physics_process(true)
 
 func _on_game_won() -> void:
-	end_screen.show_result(true)
+	#end_screen.show_result(true)
+	print("[Main] Game won!")
 
 func _on_game_lost() -> void:
-	end_screen.show_result(false)
+	#end_screen.show_result(false)
+	print("[Main] Game lost!")
 
 func _hide_power_hud() -> void:
 	# Find and hide the Player2 PowerHUD
@@ -74,8 +76,8 @@ func _hide_power_hud() -> void:
 		print("[Main] Found and hidden PowerHUD: ", power_hud.name)
 
 		# Connect to phone menu to toggle visibility
-		if phone_ui:
-			phone_ui.visibility_changed.connect(_on_phone_visibility_changed)
+		#if phone_ui:
+		#	phone_ui.visibility_changed.connect(_on_phone_visibility_changed)
 	else:
 		print("[Main] PowerHUD not found")
 
@@ -99,8 +101,9 @@ func _find_power_hud(node: Node) -> Node:
 
 func _on_phone_visibility_changed() -> void:
 	# Toggle PowerHUD visibility with phone menu
-	if power_hud:
-		power_hud.visible = phone_ui.visible
+	#if power_hud:
+	#	power_hud.visible = phone_ui.visible
+	pass
 
 func _input(event: InputEvent) -> void:
 	# Debug: Press R to reset conversation with Penny
