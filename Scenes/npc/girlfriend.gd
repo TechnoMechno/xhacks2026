@@ -69,9 +69,11 @@ func interact() -> void:
 
 func receive_player_message(text: String) -> void:
 	print("\n[Girlfriend] 💬 Player said: ", text)
+	print("[Girlfriend] 🎯 Current winning sequence progress: ", _winning_sequence_progress, "/4")
 	
 	# Check for winning sentence sequence FIRST - GUARANTEED WIN!
 	var normalized_input = text.to_lower().strip_edges()
+	print("[Girlfriend] 🔍 Normalized input: '", normalized_input, "'")
 	if _check_winning_sentence(normalized_input):
 		print("[Girlfriend] 🏆 WINNING SENTENCE DETECTED! Sequence: ", _winning_sequence_progress, "/4")
 		if _winning_sequence_progress >= 4:
@@ -80,7 +82,7 @@ func receive_player_message(text: String) -> void:
 			print("║          YOU CONQUERED THE CHALLENGE!                  ║")
 			print("╚══════════════════════════════════════════════════════════╝")
 			# Update mood to 100 and Happy immediately - NO CHATGPT INVOLVED
-			GameState.mood = 100
+			GameState.set_mood(100)  # Use set_mood to trigger win condition
 			_current_mood = "Happy"
 			# Emit winning response - bypassing all other logic
 			var win_response = "I love you too! I'm so glad we talked. You're amazing. ❤️"
@@ -94,11 +96,10 @@ func receive_player_message(text: String) -> void:
 			print("[Girlfriend] ⚠️ Winning sequence broken. Progress reset to 0.")
 			_winning_sequence_progress = 0
 	
-	# Classify intent
-	var intent = IntentClassifier.classify(text)
-
-	# Apply mood delta via GameState
-	GameState.apply_intent(intent)
+	# REMOVED: Don't classify intent or update mood here anymore
+	# The mood will be updated AFTER the girlfriend responds via mood analyzer
+	# var intent = IntentClassifier.classify(text)
+	# GameState.apply_intent(intent)
 
 	# Call Player2AINPC.chat(text) for LLM response
 	npc_thinking.emit()
@@ -126,10 +127,7 @@ func _on_chat_received(response: String) -> void:
 	_pending_response = response
 	_waiting_for_mood = true
 	
-	# Show thinking indicator to user
-	npc_thinking.emit()
-	
-	# Analyze mood using ChatGPT
+	# Analyze mood using ChatGPT (thinking indicator already shown earlier)
 	if mood_analyzer and mood_analyzer.has_method("analyze_dialogue"):
 		print("[Girlfriend] Triggering mood analysis...")
 		# Get current score from GameState
@@ -154,6 +152,9 @@ func _on_mood_analyzed(mood_data: Dictionary) -> void:
 	if mood_data.has("mood") and mood_data.has("score"):
 		var mood_name: String = mood_data["mood"]
 		var score: int = int(mood_data["score"])
+		
+		# Update GameState with the new mood score
+		GameState.set_mood(score)
 		
 		# Update current mood for next analysis
 		_current_mood = mood_name

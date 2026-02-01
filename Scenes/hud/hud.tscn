@@ -1,17 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://lf68bgyej3dq"]
+[gd_scene format=3 uid="uid://lf68bgyej3dq"]
 
 [ext_resource type="PackedScene" uid="uid://dkb8xfwvv2ba1" path="res://Scenes/ui/mood_bar.tscn" id="1_p5wc4"]
 [ext_resource type="PackedScene" uid="uid://cdhf3x48ikbaa" path="res://Scenes/ui/dialogue.tscn" id="2_hjv8g"]
 [ext_resource type="PackedScene" uid="uid://d4blvgc14pb0g" path="res://Scenes/ui/phone.tscn" id="3_jhx1v"]
 [ext_resource type="PackedScene" uid="uid://crx0l1kaj3djq" path="res://Scenes/ui/end_screen.tscn" id="4_p5e08"]
 
-[node name="HUD" type="CanvasLayer"]
-layer=10
+[node name="HUD" type="CanvasLayer" unique_id=1158725660]
+layer = 10
 
-[node name="MoodBar" parent="." instance=ExtResource("1_p5wc4")]
+[node name="MoodBar" parent="." unique_id=1201159374 instance=ExtResource("1_p5wc4")]
+offset_left = 1246.0
+offset_top = 17.0
+offset_right = 1396.0
+offset_bottom = 117.0
 
-[node name="Dialogue" parent="." instance=ExtResource("2_hjv8g")]
+[node name="Dialogue" parent="." unique_id=729229051 instance=ExtResource("2_hjv8g")]
 
-[node name="Phone" parent="." instance=ExtResource("3_jhx1v")]
+[node name="Phone" parent="." unique_id=458186662 instance=ExtResource("3_jhx1v")]
+offset_left = -288.0
+offset_top = -330.0
+offset_right = 12.0
+offset_bottom = 70.0
 
-[node name="EndScreen" parent="." instance=ExtResource("4_p5e08")]
+[node name="EndScreen" parent="." unique_id=1323299871 instance=ExtResource("4_p5e08")]
+offset_left = -261.0
+offset_top = -425.0
+offset_right = 139.0
+offset_bottom = -125.0

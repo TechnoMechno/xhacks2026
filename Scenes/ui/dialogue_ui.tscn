@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://uyqlat2234ea"]
+[gd_scene format=3 uid="uid://dcy1866li04lm"]
 
 [ext_resource type="Script" uid="uid://bhy58pnm13jg2" path="res://Scenes/ui/dialogue_ui.gd" id="1_script"]
 [ext_resource type="Script" uid="uid://demr3r0wkqqj1" path="res://addons/player2/nodes/Player2STT.gd" id="2_stt"]
@@ -31,7 +31,10 @@ anchors_preset = -1
 anchor_top = 0.05
 anchor_right = 0.75
 anchor_bottom = 0.98
-offset_left = 5.0
+offset_left = 73.0
+offset_top = 12.0
+offset_right = 68.0
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_dialogue_box")
@@ -41,18 +44,20 @@ stretch_mode = 5
 [node name="PortraitClip" type="Control" parent="DialogueBox" unique_id=456789122]
 clip_contents = true
 anchors_preset = 0
-offset_left = 1098.0
-offset_top = 523.0
+offset_left = 1028.0
+offset_top = 228.0
 offset_right = 1431.0
-offset_bottom = 856.0
+offset_bottom = 684.0
 
 [node name="Portrait" type="TextureRect" parent="DialogueBox/PortraitClip" unique_id=456789123]
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 0
-offset_top = 333.0
-offset_right = 333.0
-offset_bottom = 666.0
+offset_left = -63.0
+offset_top = -35.0
+offset_right = 365.0
+offset_bottom = 426.0
 texture = ExtResource("10_neutral")
-expand_mode = 1
+expand_mode = 4
 stretch_mode = 5
 
 [node name="ResponseArea" type="RichTextLabel" parent="DialogueBox" unique_id=149148028]
@@ -62,10 +67,10 @@ anchor_left = 0.1
 anchor_top = 0.12
 anchor_right = 0.90400004
 anchor_bottom = 0.72
-offset_left = -1.5
-offset_top = 175.56
-offset_right = 0.19995117
-offset_bottom = -54.640015
+offset_left = 1.5
+offset_top = 169.56
+offset_right = 3.1999512
+offset_bottom = -60.640015
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

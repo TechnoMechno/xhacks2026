@@ -2,12 +2,12 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bg0kuto8ky2u2"
+uid="uid://dvexh3tvsx8j"
 valid=false
 
 [deps]
 
-source_file="res://Assets/Girlfriend/portraits/._furious.png"
+source_file="res://Assets/ui/mood_bars/._progress.png"
 
 [params]
 

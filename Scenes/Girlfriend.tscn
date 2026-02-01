@@ -90,4 +90,5 @@ chat_config = ExtResource("8_kedoj")
 
 [node name="MoodAnalyzer" type="Node" parent="."]
 script = ExtResource("4_mood_analyzer")
+api_key = ""
 model = "gpt-3.5-turbo"

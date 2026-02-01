@@ -27,8 +27,6 @@ func _ready() -> void:
 	# Wire girlfriend interaction to dialogue
 	if girlfriend:
 		girlfriend.interaction_requested.connect(_on_girlfriend_interaction)
-		girlfriend.npc_reply.connect(_on_girlfriend_reply)
-		girlfriend.npc_thinking.connect(_on_girlfriend_thinking)
 		print("[Main] Connected to girlfriend.interaction_requested")
 	else:
 		print("[Main] ERROR: girlfriend is null!")
@@ -45,12 +43,11 @@ func _ready() -> void:
 func _on_girlfriend_interaction() -> void:
 	# Open visual dialogue box only (Enter key)
 	print("[Main] _on_girlfriend_interaction() called")
-	if dialogue_ui:
-		print("[Main] Showing visual dialogue box")
-		dialogue_ui.visible = true
-		# Portrait will animate in automatically via visibility_changed signal
+	if dialogue_ui and dialogue_ui.has_method("open_dialogue"):
+		print("[Main] Opening dialogue box")
+		dialogue_ui.open_dialogue(girlfriend)
 	else:
-		print("[Main] ERROR: dialogue_ui is null in interaction handler!")
+		print("[Main] ERROR: dialogue_ui is null or missing open_dialogue method!")
 
 func _on_player_message_sent(text: String) -> void:
 	# Forward player message to girlfriend

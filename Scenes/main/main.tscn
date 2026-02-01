@@ -4,26 +4,32 @@
 [ext_resource type="PackedScene" uid="uid://cm0itv8s4e3ns" path="res://Scenes/player/Player.tscn" id="2_w1fgp"]
 [ext_resource type="PackedScene" uid="uid://dqcc5hm1qeadg" path="res://Scenes/Girlfriend.tscn" id="3_4etoo"]
 [ext_resource type="Script" uid="uid://tl8gyho71fuh" path="res://Scenes/main/main.gd" id="4_main"]
-[ext_resource type="PackedScene" path="res://Scenes/ui/dialogue_ui.tscn" id="5_dialogue"]
+[ext_resource type="PackedScene" uid="uid://dcy1866li04lm" path="res://Scenes/ui/dialogue_ui.tscn" id="5_dialogue"]
+[ext_resource type="PackedScene" uid="uid://lf68bgyej3dq" path="res://Scenes/hud/hud.tscn" id="6_hud"]
 
 [node name="Main" type="Node2D" unique_id=1515818718]
+position = Vector2(-2, 80)
 script = ExtResource("4_main")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=438919561]
-position = Vector2(720, 450)
+position = Vector2(729, 549)
 
 [node name="world" parent="." unique_id=1788772691 instance=ExtResource("1_b20jg")]
-position = Vector2(186, 188)
+position = Vector2(542, 538)
 scale = Vector2(3, 3)
 
 [node name="girlfriend" parent="." unique_id=888624562 instance=ExtResource("3_4etoo")]
-position = Vector2(316, 199)
+position = Vector2(667, 511)
 scale = Vector2(3, 3)
 
 [node name="player" parent="." unique_id=471510802 instance=ExtResource("2_w1fgp")]
-position = Vector2(145, 200)
+position = Vector2(506, 576)
 scale = Vector2(3, 3)
 
-[node name="HUD" parent="." unique_id=1501745251]
+[node name="HUD" parent="." unique_id=1501745251 instance=ExtResource("6_hud")]
+offset = Vector2(-20, 0)
+transform = Transform2D(1, 0, 0, 1, -20, 0)
 
 [node name="DialogueUI" parent="." unique_id=1612425878 instance=ExtResource("5_dialogue")]
+offset = Vector2(0, 175)
+transform = Transform2D(1, 0, 0, 1, 0, 175)

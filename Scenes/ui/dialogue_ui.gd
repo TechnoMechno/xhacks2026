@@ -69,21 +69,11 @@ func _ready() -> void:
 	
 	# Connect visibility changed to handle portrait animation
 	visibility_changed.connect(_on_visibility_changed)
-	
-	# Connect to girlfriend if available
-	girlfriend_node = get_tree().get_first_node_in_group("girlfriend")
-	if girlfriend_node:
-		if girlfriend_node.has_signal("npc_reply"):
-			girlfriend_node.npc_reply.connect(_on_npc_reply)
-		if girlfriend_node.has_signal("npc_thinking"):
-			girlfriend_node.npc_thinking.connect(_on_npc_thinking)
-		if girlfriend_node.has_signal("mood_updated"):
-			girlfriend_node.mood_updated.connect(_on_mood_updated)
 
 func open_dialogue(girlfriend: Node) -> void:
 	girlfriend_node = girlfriend
 
-	# Connect to girlfriend signals if not already
+	# Connect to girlfriend signals ONLY ONCE
 	if girlfriend_node:
 		if girlfriend_node.has_signal("npc_reply") and not girlfriend_node.npc_reply.is_connected(_on_npc_reply):
 			girlfriend_node.npc_reply.connect(_on_npc_reply)
