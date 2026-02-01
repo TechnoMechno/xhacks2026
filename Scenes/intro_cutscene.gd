@@ -12,7 +12,7 @@ func _ready() -> void:
 		{"player": $player/AnimationPlayer, "anim": "pan camera"},
 		{"player": $title/AnimationPlayer, "anim": "appear"}
 	]
-	
+
 	# Play the first animation
 	animations[current_animation]["player"].play(animations[current_animation]["anim"])
 
@@ -20,6 +20,8 @@ func _input(event):
 	# Detect left mouse click or space bar
 	if (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) or \
 	   (event is InputEventKey and event.pressed and event.keycode == KEY_SPACE):
+		# Wait a brief moment before advancing to let sounds start playing
+		await get_tree().create_timer(0.1).timeout
 		next_animation()
 
 func next_animation():
