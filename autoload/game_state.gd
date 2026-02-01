@@ -46,6 +46,7 @@ func set_mood(new_mood: int) -> void:
 	mood = clamp(new_mood, 0, 100)
 	var delta = mood - old_mood
 	print("[MOOD] %s" % _get_mood_bar(old_mood, delta))
+	print("[GameState] Emitting mood_changed signal with value: ", mood)
 	mood_changed.emit(mood)
 	_check_win_lose()
 

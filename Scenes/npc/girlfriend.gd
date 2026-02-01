@@ -25,6 +25,7 @@ var _last_mood_tier: int = -1
 var _interaction_history: Array = []  # Track last interactions for mood analysis
 const MAX_HISTORY: int = 2  # Keep last 2 interactions
 var _pending_response: String = ""  # Store response while waiting for mood analysis
+var _pending_player_message: String = ""  # Store player's message for mood analysis
 var _waiting_for_mood: bool = false  # Flag to track if we're waiting
 var _current_mood: String = "Furious"  # Track current mood for context
 
@@ -101,6 +102,9 @@ func receive_player_message(text: String) -> void:
 	# var intent = IntentClassifier.classify(text)
 	# GameState.apply_intent(intent)
 
+	# Store player message for mood analysis after girlfriend responds
+	_pending_player_message = text
+
 	# Update system prompt based on new mood
 	_update_system_prompt_for_mood(GameState.mood)
 
@@ -130,12 +134,12 @@ func _on_chat_received(response: String) -> void:
 	_pending_response = response
 	_waiting_for_mood = true
 	
-	# Analyze mood using ChatGPT (thinking indicator already shown earlier)
+	# Analyze mood using ChatGPT based on PLAYER'S message (not girlfriend's response)
 	if mood_analyzer and mood_analyzer.has_method("analyze_dialogue"):
-		print("[Girlfriend] Triggering mood analysis...")
+		print("[Girlfriend] Triggering mood analysis on player message: ", _pending_player_message)
 		# Get current score from GameState
 		var current_score = GameState.mood if GameState else 50
-		mood_analyzer.analyze_dialogue(dialogue_text, current_score, _interaction_history, _current_mood)
+		mood_analyzer.analyze_dialogue(_pending_player_message, current_score, _interaction_history, _current_mood)
 	else:
 		print("[Girlfriend] ⚠️ Warning: MoodAnalyzer not found or method missing")
 		# If no analyzer, emit response immediately

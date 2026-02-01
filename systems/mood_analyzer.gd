@@ -24,10 +24,10 @@ const WINNING_SENTENCES = [
 ]
 var _winning_sequence_progress: int = 0  # Tracks which sentence user is on (0-3)
 
-const SYSTEM_PROMPT = """You are a mood analyzer for an AI girlfriend character in a game. Your task is to analyze the girlfriend's dialogue output and determine her emotional state and how it affects the relationship score.
+const SYSTEM_PROMPT = """You are a mood analyzer for an AI girlfriend character in a game. Your task is to analyze what the PLAYER says to the girlfriend and determine how it affects her emotional state and the relationship score.
 
 TASK:
-Analyze the provided girlfriend dialogue, current mood, and conversation history to respond with:
+Analyze the provided player message, current mood, and conversation history to respond with:
 1. The mood category (one of the 7 listed below)
 2. The NEW relationship score after applying the mood change
 3. The interaction type (genuine_positive, neutral, excuse_lie, or antagonistic)
@@ -46,10 +46,10 @@ Negative emotions:
 - Furious: Extremely angry, enraged, explosive responses
 
 INTERACTION TYPES:
-1. **genuine_positive**: User says something nice and seems sincere/truthful
+1. **genuine_positive**: Player says something nice, sincere, takes responsibility, or shows empathy
 2. **neutral**: Neither particularly good nor bad
-3. **excuse_lie**: User makes excuses or lies to placate her (she can tell)
-4. **antagonistic**: User deliberately says something bad to upset her
+3. **excuse_lie**: Player makes excuses or lies to placate her (she can tell)
+4. **antagonistic**: Player deliberately says something mean, dismissive, or hurtful
 
 SCORING DELTAS:
 For genuine_positive (COMPOUNDS when consecutive - easier to win!):
@@ -100,7 +100,7 @@ IMPORTANT:
 EXAMPLES:
 
 Input: {
-  "girlfriend_output": "why are you late?",
+  "player_message": "What?",
   "current_score": 50,
   "current_mood": "Furious",
   "previous_interactions": []
@@ -108,7 +108,7 @@ Input: {
 Output: {"mood": "Furious", "score": 50, "interaction_type": "neutral", "positive_streak": 0, "antagonistic_streak": 0}
 
 Input: {
-  "girlfriend_output": "I'm really sorry babe, I should have called you. You're completely right to be upset",
+  "player_message": "I'm really sorry babe, I should have called you. You're completely right to be upset",
   "current_score": 50,
   "current_mood": "Furious",
   "previous_interactions": [{"type": "neutral"}]
@@ -116,7 +116,7 @@ Input: {
 Output: {"mood": "Angry", "score": 60, "interaction_type": "genuine_positive", "positive_streak": 1, "antagonistic_streak": 0}
 
 Input: {
-  "girlfriend_output": "I know I messed up. Let me make it up to you, I'll do whatever you need",
+  "player_message": "I know I messed up. Let me make it up to you, I'll do whatever you need",
   "current_score": 60,
   "current_mood": "Angry",
   "previous_interactions": [{"type": "neutral"}, {"type": "genuine_positive"}]
@@ -124,7 +124,7 @@ Input: {
 Output: {"mood": "Sad", "score": 75, "interaction_type": "genuine_positive", "positive_streak": 2, "antagonistic_streak": 0}
 
 Input: {
-  "girlfriend_output": "You mean everything to me. I'm so sorry for worrying you",
+  "player_message": "You mean everything to me. I'm so sorry for worrying you",
   "current_score": 75,
   "current_mood": "Sad",
   "previous_interactions": [{"type": "genuine_positive"}, {"type": "genuine_positive"}]
@@ -132,7 +132,7 @@ Input: {
 Output: {"mood": "Soft Smile", "score": 95, "interaction_type": "genuine_positive", "positive_streak": 3, "antagonistic_streak": 0}
 
 Input: {
-  "girlfriend_output": "I love you so much. Thank you for being patient with me",
+  "player_message": "I love you so much. Thank you for being patient with me",
   "current_score": 95,
   "current_mood": "Soft Smile",
   "previous_interactions": [{"type": "genuine_positive"}, {"type": "genuine_positive"}, {"type": "genuine_positive"}]
@@ -140,7 +140,7 @@ Input: {
 Output: {"mood": "Happy", "score": 100, "interaction_type": "genuine_positive", "positive_streak": 4, "antagonistic_streak": 0}
 
 Input: {
-  "girlfriend_output": "I'm sorry, I was stuck in traffic",
+  "player_message": "I was stuck in traffic, it's not my fault",
   "current_score": 50,
   "current_mood": "Furious",
   "previous_interactions": [{"type": "neutral"}]
@@ -148,14 +148,14 @@ Input: {
 Output: {"mood": "Angry", "score": 45, "interaction_type": "excuse_lie", "positive_streak": 0, "antagonistic_streak": 0}
 
 Input: {
-  "girlfriend_output": "Whatever, I don't care",
+  "player_message": "Whatever, I don't care",
   "current_score": 45,
   "current_mood": "Angry",
   "previous_interactions": [{"type": "excuse_lie"}]
 }
 Output: {"mood": "Furious", "score": 32, "interaction_type": "antagonistic", "positive_streak": 0, "antagonistic_streak": 1}
 
-Now analyze the following girlfriend output:"""
+Now analyze the following player message:"""
 
 func _ready() -> void:
 	# Create HTTPRequest node
@@ -220,8 +220,8 @@ func analyze_dialogue(girlfriend_output: String, current_score: int = 50, previo
 		return
 	
 	print("\n" + "=".repeat(60))
-	print("[MoodAnalyzer] 🔍 ANALYZING GIRLFRIEND DIALOGUE")
-	print("[MoodAnalyzer] Input: ", girlfriend_output)
+	print("[MoodAnalyzer] 🔍 ANALYZING PLAYER MESSAGE")
+	print("[MoodAnalyzer] Player said: ", girlfriend_output)
 	print("[MoodAnalyzer] Current Score: ", current_score)
 	print("[MoodAnalyzer] Current Mood: ", current_mood)
 	print("[MoodAnalyzer] Previous Interactions: ", previous_interactions)
@@ -253,7 +253,7 @@ func analyze_dialogue(girlfriend_output: String, current_score: int = 50, previo
 	print("=".repeat(60))
 	
 	var interactions_json = JSON.stringify(previous_interactions)
-	var user_message = "{\n  \"girlfriend_output\": \"" + girlfriend_output + "\",\n  \"current_score\": " + str(current_score) + ",\n  \"current_mood\": \"" + current_mood + "\",\n  \"previous_interactions\": " + interactions_json + "\n}"
+	var user_message = "{\n  \"player_message\": \"" + girlfriend_output + "\",\n  \"current_score\": " + str(current_score) + ",\n  \"current_mood\": \"" + current_mood + "\",\n  \"previous_interactions\": " + interactions_json + "\n}"
 	
 	var request_body = {
 		"model": model,
