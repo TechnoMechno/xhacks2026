@@ -21,7 +21,7 @@ func _physics_process(_delta: float) -> void:
 	_update_animation(direction)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("interact_dialogue"):
 		_interact_with_closest()
 
 func _update_animation(direction: Vector2) -> void:

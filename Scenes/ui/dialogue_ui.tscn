@@ -1,51 +1,100 @@
-[gd_scene format=3 uid="uid://dialogue_ui_simple"]
+[gd_scene format=3 uid="uid://c16ynobwq2d6w"]
 
-[ext_resource type="Script" path="res://Scenes/ui/dialogue_ui.gd" id="1_script"]
-[ext_resource type="Script" uid="uid://dj8gvq0vq1bqo" path="res://addons/player2/nodes/Player2STT.gd" id="2_stt"]
+[ext_resource type="Script" uid="uid://bhy58pnm13jg2" path="res://Scenes/ui/dialogue_ui.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://demr3r0wkqqj1" path="res://addons/player2/nodes/Player2STT.gd" id="2_stt"]
+[ext_resource type="Texture2D" uid="uid://dskqao4asi6ib" path="res://Assets/dialogue/dialogue_box.png" id="3_dialogue_box"]
+[ext_resource type="Texture2D" uid="uid://djoygstyo30jf" path="res://Assets/dialogue/send_button_unpressed.png" id="4_n05w5"]
+[ext_resource type="Texture2D" uid="uid://cbyh1vsmu0urp" path="res://Assets/dialogue/send_button_depressed.png" id="5_g6qka"]
+[ext_resource type="Texture2D" uid="uid://bx2ecvj5i4g48" path="res://Assets/dialogue/send_button_pressed.png" id="6_sa6xx"]
+[ext_resource type="Texture2D" uid="uid://xrdrqh624cl1" path="res://Assets/dialogue/micbutton-normal.png" id="7_yvxix"]
+[ext_resource type="Texture2D" uid="uid://byxcuxx6dlqdp" path="res://Assets/dialogue/micbutton-pressed.png" id="8_5q4p5"]
+[ext_resource type="Texture2D" uid="uid://y13f814oqw14" path="res://Assets/dialogue/micbutton-hover.png" id="9_cgyok"]
 
-[node name="DialogueUI" type="CanvasLayer"]
+[node name="DialogueUI" type="CanvasLayer" unique_id=1689415567]
 layer = 10
 script = ExtResource("1_script")
 
-[node name="Player2STT" type="Node" parent="."]
+[node name="Player2STT" type="Node" parent="." unique_id=97981720]
 script = ExtResource("2_stt")
 
-[node name="Panel" type="PanelContainer" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
+[node name="Background" type="ColorRect" parent="." unique_id=493753084]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -120.0
+color = Color(0, 0, 0, 0.8)
+
+[node name="DialogueBox" type="TextureRect" parent="." unique_id=879450528]
+anchors_preset = -1
+anchor_top = 0.05
+anchor_right = 0.75
+anchor_bottom = 0.98
+offset_left = 5.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+texture = ExtResource("3_dialogue_box")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="VBox" type="VBoxContainer" parent="Panel"]
-layout_mode = 2
-
-[node name="History" type="RichTextLabel" parent="Panel/VBox"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
+[node name="ResponseArea" type="RichTextLabel" parent="DialogueBox" unique_id=149148028]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.12
+anchor_right = 0.90400004
+anchor_bottom = 0.72
+offset_left = -1.5
+offset_top = 175.56
+offset_right = 0.19995117
+offset_bottom = -54.640015
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 scroll_following = true
 
-[node name="InputRow" type="HBoxContainer" parent="Panel/VBox"]
-layout_mode = 2
+[node name="TypingInputBox" type="LineEdit" parent="DialogueBox" unique_id=829043832]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.12
+anchor_right = 0.9
+anchor_bottom = 0.72
+offset_left = 0.5
+offset_top = 472.56
+offset_right = -285.5
+offset_bottom = 25.359985
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Type your response..."
+caret_blink = true
 
-[node name="Input" type="LineEdit" parent="Panel/VBox/InputRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Type your message..."
+[node name="SendButton" type="TextureButton" parent="DialogueBox" unique_id=1838987056]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.90000004
+anchor_top = 0.851
+anchor_right = 0.90000004
+anchor_bottom = 0.851
+offset_left = -266.50006
+offset_top = -140.28699
+offset_right = -109.40857
+offset_bottom = -85.28699
+texture_normal = ExtResource("4_n05w5")
+texture_pressed = ExtResource("5_g6qka")
+texture_hover = ExtResource("6_sa6xx")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="MicBtn" type="Button" parent="Panel/VBox/InputRow"]
-layout_mode = 2
-toggle_mode = true
-text = "🎤"
-tooltip_text = "Hold to speak"
-
-[node name="SendBtn" type="Button" parent="Panel/VBox/InputRow"]
-layout_mode = 2
-text = "Send"
-
-[node name="CloseBtn" type="Button" parent="Panel/VBox"]
-layout_mode = 2
-text = "Close [Esc]"
+[node name="MicButton" type="TextureButton" parent="DialogueBox" unique_id=522970920]
+layout_mode = 0
+offset_left = 873.0
+offset_top = 569.0
+offset_right = 950.3402
+offset_bottom = 631.0
+texture_normal = ExtResource("7_yvxix")
+texture_pressed = ExtResource("8_5q4p5")
+texture_hover = ExtResource("9_cgyok")
+ignore_texture_size = true
+stretch_mode = 0

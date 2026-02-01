@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2dlswso0c1qf"]
+[gd_scene format=3 uid="uid://b2dlswso0c1qf"]
 
 [ext_resource type="PackedScene" uid="uid://cnpj4ib4tw0xh" path="res://Scenes/world.tscn" id="1_b20jg"]
 [ext_resource type="PackedScene" uid="uid://lf68bgyej3dq" path="res://Scenes/hud/hud.tscn" id="1_yqbfl"]
@@ -11,8 +11,7 @@
 script = ExtResource("4_main")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=438919561]
-position = Vector2(243, 189)
-zoom = Vector2(0.7, 0.7)
+position = Vector2(720, 450)
 
 [node name="world" parent="." unique_id=1788772691 instance=ExtResource("1_b20jg")]
 position = Vector2(186, 188)

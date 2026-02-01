@@ -39,11 +39,11 @@ func _ready() -> void:
 		print("[Main] ERROR: dialogue_ui is null!")
 
 func _on_girlfriend_interaction() -> void:
-	# Open dialogue with Penny
+	# Open visual dialogue box only (Enter key)
 	print("[Main] _on_girlfriend_interaction() called")
 	if dialogue_ui:
-		print("[Main] Calling dialogue_ui.open_dialogue()")
-		dialogue_ui.open_dialogue(girlfriend)
+		print("[Main] Showing visual dialogue box")
+		dialogue_ui.visible = true
 	else:
 		print("[Main] ERROR: dialogue_ui is null in interaction handler!")
 
