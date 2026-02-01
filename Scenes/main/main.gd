@@ -5,13 +5,19 @@ extends Node2D
 @onready var player: CharacterBody2D = $player
 @onready var girlfriend: CharacterBody2D = $girlfriend
 @onready var dialogue_ui: CanvasLayer = $DialogueUI
+@onready var phone_ui = $HUD/Phone
 
 @onready var end_screen = $HUD/EndScreen
+
+var power_hud: Node = null
 
 func _ready() -> void:
 	print("[Main] _ready() called")
 	print("[Main] girlfriend = ", girlfriend)
 	print("[Main] dialogue_ui = ", dialogue_ui)
+
+	# Hide Player2 PowerHUD if it exists
+	_hide_power_hud()
 
 	# Game state signals
 	GameState.game_won.connect(_on_game_won)
@@ -56,6 +62,45 @@ func _on_game_won() -> void:
 
 func _on_game_lost() -> void:
 	end_screen.show_result(false)
+
+func _hide_power_hud() -> void:
+	# Find and hide the Player2 PowerHUD
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	power_hud = _find_power_hud(get_tree().root)
+	if power_hud:
+		power_hud.visible = false
+		print("[Main] Found and hidden PowerHUD: ", power_hud.name)
+
+		# Connect to phone menu to toggle visibility
+		if phone_ui:
+			phone_ui.visibility_changed.connect(_on_phone_visibility_changed)
+	else:
+		print("[Main] PowerHUD not found")
+
+func _find_power_hud(node: Node) -> Node:
+	var node_name = node.name.to_lower()
+	var script_name = ""
+	if node.get_script():
+		script_name = str(node.get_script().get_path()).to_lower()
+
+	# Check if this is the PowerHUD
+	if ("power" in node_name and "hud" in node_name) or "power_hud" in script_name:
+		return node
+
+	# Check children recursively
+	for child in node.get_children():
+		var result = _find_power_hud(child)
+		if result:
+			return result
+
+	return null
+
+func _on_phone_visibility_changed() -> void:
+	# Toggle PowerHUD visibility with phone menu
+	if power_hud:
+		power_hud.visible = phone_ui.visible
 
 func _input(event: InputEvent) -> void:
 	# Debug: Press R to reset conversation with Penny

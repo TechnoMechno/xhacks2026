@@ -73,7 +73,7 @@ func _on_chat_received(response: String) -> void:
 
 ## Get the mood tier (0-20) from mood value (0-100)
 func _get_mood_tier(mood: int) -> int:
-	return clampi(mood / 5, 0, 20)
+	return clampi(int(mood / 5.0), 0, 20)
 
 ## Update the system prompt if we've crossed into a new mood tier
 func _update_system_prompt_for_mood(mood: int) -> void:
@@ -104,7 +104,6 @@ func _update_system_prompt_for_mood(mood: int) -> void:
 ## Build world status string for the LLM
 func _build_world_status() -> String:
 	var mood = GameState.mood
-	var tier = _get_mood_tier(mood)
 
 	var parts = []
 

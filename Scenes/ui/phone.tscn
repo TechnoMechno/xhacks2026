@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://d4blvgc14pb0g"]
+[gd_scene format=3 uid="uid://d4blvgc14pb0g"]
 
 [ext_resource type="Script" path="res://Scenes/ui/phone.gd" id="1_y0p6f"]
 
