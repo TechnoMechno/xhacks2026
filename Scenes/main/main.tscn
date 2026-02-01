@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b2dlswso0c1qf"]
+[gd_scene format=3 uid="uid://b2dlswso0c1qf"]
 
 [ext_resource type="PackedScene" uid="uid://cnpj4ib4tw0xh" path="res://Scenes/world.tscn" id="1_b20jg"]
 [ext_resource type="PackedScene" uid="uid://lf68bgyej3dq" path="res://Scenes/hud/hud.tscn" id="1_yqbfl"]
-[ext_resource type="PackedScene" uid="uid://cm0itv8s4e3ns" path="res://Scenes/player/player.tscn" id="2_w1fgp"]
+[ext_resource type="PackedScene" uid="uid://cm0itv8s4e3ns" path="res://Scenes/player/Player.tscn" id="2_w1fgp"]
 [ext_resource type="PackedScene" uid="uid://dqcc5hm1qeadg" path="res://Scenes/Girlfriend.tscn" id="3_4etoo"]
 
 [node name="Main" type="Node2D" unique_id=1497922291]
@@ -21,4 +21,4 @@ position = Vector2(316, 199)
 [node name="player" parent="." unique_id=471510802 instance=ExtResource("2_w1fgp")]
 position = Vector2(145, 200)
 
-[node name="HUD" parent="." instance=ExtResource("1_yqbfl")]
+[node name="HUD" parent="." unique_id=1501745251 instance=ExtResource("1_yqbfl")]
