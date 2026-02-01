@@ -150,7 +150,6 @@ script = ExtResource("1_jnk8a")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=987541774]
 sprite_frames = SubResource("SpriteFrames_r57px")
 animation = &"walk_right"
-frame = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=824439564]
 position = Vector2(0, 8)

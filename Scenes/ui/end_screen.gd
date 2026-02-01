@@ -13,6 +13,10 @@ func _ready() -> void:
 
 func show_result(player_won: bool) -> void:
 	won = player_won
+
+	# Wait 2 seconds so the player can see the health bar update before the cutscene
+	await get_tree().create_timer(2.5).timeout
+
 	if won:
 		# Play win cutscene video instead of showing end screen
 		print("[EndScreen] Player won! Transitioning to win cutscene...")

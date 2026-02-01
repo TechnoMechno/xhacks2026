@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c7e2dndhnkic2" path="res://Scenes/ui/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://drhhwp85se5ui" path="res://Assets/background.jpg" id="2_xulg5"]
+[ext_resource type="AudioStream" uid="uid://cjor3tuo6c7bl" path="res://sound/menu music.mp3" id="3_7anfk"]
 
 [node name="Menu" type="Control" unique_id=1937416644]
 layout_mode = 3
@@ -57,3 +58,7 @@ custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Quit"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1560343429]
+stream = ExtResource("3_7anfk")
+autoplay = true

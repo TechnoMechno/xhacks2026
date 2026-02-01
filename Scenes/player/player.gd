@@ -28,26 +28,20 @@ func _input(event: InputEvent) -> void:
 		_interact_with_closest()
 
 func _update_animation(direction: Vector2) -> void:
-	if not anim or not anim.sprite_frames:
+	if not anim:
 		return
 
-	var is_moving = direction.length() > 0.01
-	if not is_moving:
-		anim.pause()
-		return
-
-	var dir_name = "down"
-	if abs(direction.x) > abs(direction.y):
-		dir_name = "right" if direction.x > 0 else "left"
-	elif direction.length() > 0:
-		dir_name = "down" if direction.y > 0 else "up"
-
-	var anim_name = "walk_" + dir_name
-	if anim.sprite_frames.has_animation(anim_name):
-		if anim.animation != anim_name:
-			anim.play(anim_name)
-		elif not anim.is_playing():
-			anim.play()
+	if direction.x > 0:
+		anim.play("walk_right")
+	elif direction.x < 0:
+		anim.play("walk_left")
+	elif direction.y > 0:
+		anim.play("walk_down")
+	elif direction.y < 0:
+		anim.play("walk_up")
+	else:
+		anim.stop()
+		anim.frame = 0
 
 func _on_body_entered(body: Node2D) -> void:
 	print("[Player] Body entered: ", body.name, " has interact: ", body.has_method("interact"))

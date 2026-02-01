@@ -25,9 +25,9 @@ driver/enable_input=true
 GameState="*uid://v1y4pxfgsb0o"
 Player2AsyncHelper="*uid://dvrhlfnm041m4"
 Player2ErrorHelper="*uid://dmbaq0aasr5kt"
+Player2APISourceHelper="*uid://c3qd7pyhp8whk"
 Player2WebHelper="*uid://dnlfee00wl7jb"
 Player2AuthHelper="*uid://dt0p7yaopsgr8"
-Player2APISourceHelper="*uid://c3qd7pyhp8whk"
 Player2API="*uid://ds84b57fgfbrm"
 
 [display]
@@ -95,8 +95,8 @@ interact_dialogue={
 
 [player2]
 
-hide_opening_prompt=true
-client_id="019c1901-8d54-772d-a9f8-afc94ade726f"
+client_id="019c15d2-bf7c-7928-9c9a-87665310e6ad"
+hide_opening_prompt=false
 
 [rendering]
 
