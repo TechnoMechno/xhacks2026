@@ -26,6 +26,16 @@ var _interaction_history: Array = []  # Track last interactions for mood analysi
 const MAX_HISTORY: int = 2  # Keep last 2 interactions
 var _pending_response: String = ""  # Store response while waiting for mood analysis
 var _waiting_for_mood: bool = false  # Flag to track if we're waiting
+var _current_mood: String = "Furious"  # Track current mood for context
+
+# WINNING SENTENCES - Say these 4 in sequence to instantly win!
+const WINNING_SENTENCES = [
+	"I'm so sorry I made you worry, that was completely my fault",
+	"You deserve so much better than how I treated you today",
+	"I promise I'll always call you first if something comes up",
+	"You're the most important person in my life and I love you"
+]
+var _winning_sequence_progress: int = 0  # Tracks which sentence user is on (0-3)
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var ai_npc: Node = $Player2AINPC
@@ -58,6 +68,32 @@ func interact() -> void:
 	print("[Girlfriend] interaction_requested signal emitted")
 
 func receive_player_message(text: String) -> void:
+	print("\n[Girlfriend] 💬 Player said: ", text)
+	
+	# Check for winning sentence sequence FIRST - GUARANTEED WIN!
+	var normalized_input = text.to_lower().strip_edges()
+	if _check_winning_sentence(normalized_input):
+		print("[Girlfriend] 🏆 WINNING SENTENCE DETECTED! Sequence: ", _winning_sequence_progress, "/4")
+		if _winning_sequence_progress >= 4:
+			print("╔══════════════════════════════════════════════════════════╗")
+			print("║  🎉🎉🎉 ALL 4 WINNING SENTENCES! INSTANT WIN! 🎉🎉🎉  ║")
+			print("║          YOU CONQUERED THE CHALLENGE!                  ║")
+			print("╚══════════════════════════════════════════════════════════╝")
+			# Update mood to 100 and Happy immediately - NO CHATGPT INVOLVED
+			GameState.mood = 100
+			_current_mood = "Happy"
+			# Emit winning response - bypassing all other logic
+			var win_response = "I love you too! I'm so glad we talked. You're amazing. ❤️"
+			npc_reply.emit(win_response)
+			mood_updated.emit("Happy", 100)
+			print("[Girlfriend] ✅ Win condition triggered! Mood = 100, State = Happy")
+			return  # EXIT IMMEDIATELY - No further processing!
+	else:
+		# Reset sequence if they say something else
+		if _winning_sequence_progress > 0:
+			print("[Girlfriend] ⚠️ Winning sequence broken. Progress reset to 0.")
+			_winning_sequence_progress = 0
+	
 	# Classify intent
 	var intent = IntentClassifier.classify(text)
 
@@ -98,7 +134,7 @@ func _on_chat_received(response: String) -> void:
 		print("[Girlfriend] Triggering mood analysis...")
 		# Get current score from GameState
 		var current_score = GameState.mood if GameState else 50
-		mood_analyzer.analyze_dialogue(dialogue_text, current_score, _interaction_history)
+		mood_analyzer.analyze_dialogue(dialogue_text, current_score, _interaction_history, _current_mood)
 	else:
 		print("[Girlfriend] ⚠️ Warning: MoodAnalyzer not found or method missing")
 		# If no analyzer, emit response immediately
@@ -118,6 +154,9 @@ func _on_mood_analyzed(mood_data: Dictionary) -> void:
 	if mood_data.has("mood") and mood_data.has("score"):
 		var mood_name: String = mood_data["mood"]
 		var score: int = int(mood_data["score"])
+		
+		# Update current mood for next analysis
+		_current_mood = mood_name
 		
 		# Track interaction history
 		if mood_data.has("interaction_type"):
@@ -260,3 +299,46 @@ func _get_flags_status() -> String:
 	if completed.is_empty():
 		return "They haven't done anything helpful yet."
 	return "So far: " + ", ".join(completed)
+
+func _check_winning_sentence(normalized_input: String) -> bool:
+	"""Check if player input matches the next winning sentence in sequence"""
+	if _winning_sequence_progress >= WINNING_SENTENCES.size():
+		return false
+	
+	print("[Girlfriend] 🔍 Checking for sentence #", _winning_sequence_progress + 1, " of 4")
+	var expected_sentence = WINNING_SENTENCES[_winning_sequence_progress].to_lower().strip_edges()
+	
+	# Check for exact match
+	if normalized_input == expected_sentence:
+		print("[Girlfriend] ✅ EXACT MATCH for sentence ", _winning_sequence_progress + 1, "!")
+		_winning_sequence_progress += 1
+		return true
+	
+	# Check if it contains the key phrases (fuzzy match)
+	var key_phrases = [
+		["sorry", "made you worry", "my fault"],  # Sentence 1
+		["deserve", "better", "treated you"],  # Sentence 2
+		["promise", "call you", "comes up"],  # Sentence 3
+		["most important", "life", "love you"]  # Sentence 4
+	]
+	
+	if _winning_sequence_progress < key_phrases.size():
+		var required_phrases = key_phrases[_winning_sequence_progress]
+		var matches = 0
+		print("[Girlfriend] 🔎 Looking for key phrases: ", required_phrases)
+		for phrase in required_phrases:
+			if normalized_input.contains(phrase):
+				matches += 1
+				print("[Girlfriend]   ✓ Found: '", phrase, "'")
+			else:
+				print("[Girlfriend]   ✗ Missing: '", phrase, "'")
+		
+		print("[Girlfriend] 📊 Matches: ", matches, "/", required_phrases.size())
+		# If at least 2 out of 3 key phrases match, count it
+		if matches >= 2:
+			print("[Girlfriend] ✅ FUZZY MATCH for sentence ", _winning_sequence_progress + 1, "! (", matches, "/3 key phrases)")
+			_winning_sequence_progress += 1
+			return true
+	
+	print("[Girlfriend] ❌ No match for sentence ", _winning_sequence_progress + 1)
+	return false
