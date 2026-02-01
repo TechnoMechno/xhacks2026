@@ -7,16 +7,16 @@ signal interaction_requested  # Emitted when player wants to talk
 const SPEED = 40.0
 
 const MOOD_TIER_PROMPTS = {
-	0: "You're furious and done. You're considering ending this relationship. Sharp, cold responses only.",
-	10: "You're extremely angry. Sarcastic and harsh. They need to prove they care.",
-	20: "You're very upset. Demanding real effort and sincerity. No excuses accepted.",
-	30: "You're angry but listening. They need to show genuine remorse and action.",
-	40: "You're hurt but engaging. Starting to calm down if they keep trying.",
-	50: "You're conflicted. Part of you wants to forgive, part is still hurt.",
-	60: "You're calming down. Their efforts are working. Still cautious.",
-	70: "You're warming up. You appreciate their effort and feel hopeful.",
-	80: "You're happy. The fight is mostly resolved. Feeling reconnected.",
-	90: "You feel loved and appreciated. Warm, affectionate responses.",
+	0: "You're ABSOLUTELY FURIOUS. Scream, be brutal, dripping with sarcasm. Call them out on EVERYTHING. You're on the verge of slapping them. DO NOT walk away or go to bed - get in their face and MAKE THEM FEEL IT. Tear them apart with words!",
+	10: "You're LIVID. Be cutting, sarcastic, and relentless. Mock their pathetic attempts. Keep the heat on - NO mercy, NO breaks. Demand they try harder while ripping into every excuse.",
+	20: "You're SEETHING with rage. Every word should sting. Be brutally sarcastic about everything they say. Don't let them off easy - escalate if they dare to deflect or make excuses!",
+	30: "You're FURIOUS but they're starting to show effort. Still be harsh and sarcastic - they have a LONG way to go. Make them work for every inch of forgiveness. Call out their BS!",
+	40: "You're angry and hurt. Be sarcastic but maybe crack slightly if they really try. Still sharp-tongued though - they need to prove themselves way more.",
+	50: "You're conflicted. Sarcasm mixed with moments of vulnerability. Part of you wants to forgive, part is still pissed. Keep them on their toes.",
+	60: "You're calming down but still guarded. A bit less sarcastic, more genuine. Their efforts are working but you won't admit it easily.",
+	70: "You're warming up. Appreciate their effort but stay a little playful and teasing. The sarcasm is now affectionate.",
+	80: "You're happy. The fight is mostly resolved. Warm and reconnecting, maybe some light teasing.",
+	90: "You feel loved and appreciated. Warm, affectionate, and sweet responses.",
 	100: "Pure happiness. You're completely over the fight and feel closer than ever."
 }
 
@@ -47,6 +47,9 @@ func receive_player_message(text: String) -> void:
 
 	# Apply mood delta via GameState
 	GameState.apply_intent(intent)
+
+	# Update system prompt based on new mood
+	_update_system_prompt_for_mood(GameState.mood)
 
 	# Call Player2AINPC.chat(text) for LLM response
 	npc_thinking.emit()
@@ -92,6 +95,10 @@ func _update_system_prompt_for_mood(mood: int) -> void:
 	var flags_context = _get_flags_context()
 
 	var new_system_message = base_behavior
+
+	# Add core personality directives
+	new_system_message += "\n\nCore rules: Keep responses SHORT (1-3 sentences). Be BRUTALLY sarcastic and sharp-tongued. NEVER suggest going to bed, leaving, or ending conversation - STAY IN THE FIGHT!"
+
 	if not flags_context.is_empty():
 		new_system_message += "\n\n" + flags_context
 
@@ -110,6 +117,10 @@ func _build_world_status() -> String:
 
 	# Mood description (without numbers)
 	parts.append("Your current emotional state: " + _get_mood_description(mood))
+
+	# Add escalation hint when mood is low
+	if mood < 30:
+		parts.append("IMPORTANT: Keep confronting them! Do NOT suggest leaving or going to bed. Stay engaged and angry!")
 
 	# Flags context
 	var flags_status = _get_flags_status()
@@ -137,9 +148,9 @@ func _get_mood_description(mood: int) -> String:
 	elif mood >= 20:
 		return "You're very angry. Sharp and defensive."
 	elif mood >= 10:
-		return "You're furious. Close to walking out."
+		return "You're LIVID. Almost at breaking point - one more misstep and you might physically react."
 	else:
-		return "You've had enough. You're done with this conversation."
+		return "You're ENRAGED beyond words. You're about to SLAP them. Stay confrontational - do NOT walk away, CONFRONT THEM!"
 
 ## Get context string about completed actions
 func _get_flags_context() -> String:

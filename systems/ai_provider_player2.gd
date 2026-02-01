@@ -34,7 +34,7 @@ func _setup_npc() -> void:
 	_ai_npc.set_script(npc_script)
 	_ai_npc.set("character_name", "Penny")
 	_ai_npc.set("character_description", system_prompt)
-	_ai_npc.set("character_system_message", "Keep responses short (1-3 sentences). Be emotional and reactive.")
+	_ai_npc.set("character_system_message", "Keep responses short (1-3 sentences). Be EXTREMELY sarcastic, sharp, and relentlessly angry. Never back down or disengage. Keep confronting them about their mistakes. DO NOT suggest going to bed or ending the conversation - stay in the fight!")
 	_ai_npc.set("greet_on_entry", false)
 	_ai_npc.set("auto_store_conversation_history", false)
 
