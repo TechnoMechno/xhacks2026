@@ -9,8 +9,8 @@ signal cutscene_finished
 var _finished: bool = false
 
 func _ready() -> void:
-	# Load video using VideoStreamPlayer
-	var video_stream = load("res://videos/win.MP4")
+	# Load video using VideoStreamPlayer (.ogv format required for Godot)
+	var video_stream = load("res://videos/win.ogv")
 	if video_stream:
 		video_player.stream = video_stream
 		video_player.play()
@@ -18,7 +18,7 @@ func _ready() -> void:
 		# Connect the finished signal
 		video_player.finished.connect(_on_video_finished)
 	else:
-		push_error("[WinCutscene] Failed to load video file")
+		push_error("[WinCutscene] Failed to load video file: res://videos/win.ogv")
 		# Fallback - go to end screen after a delay
 		await get_tree().create_timer(2.0).timeout
 		_on_video_finished()
