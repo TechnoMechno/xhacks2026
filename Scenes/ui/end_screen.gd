@@ -20,4 +20,5 @@ func show_result(player_won: bool) -> void:
 	visible = true
 
 func _on_restart_pressed() -> void:
-	get_tree().reload_current_scene()
+	GameState.change_state(GameState.State.MENU)
+	get_tree().change_scene_to_file("res://Scenes/ui/menu.tscn")

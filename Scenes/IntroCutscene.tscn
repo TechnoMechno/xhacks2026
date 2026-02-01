@@ -249,8 +249,8 @@ script = ExtResource("1_p33aa")
 [node name="Label" type="Label" parent="." unique_id=682645036]
 offset_left = -142.0
 offset_top = 34.0
-offset_right = 8.0
-offset_bottom = 59.00003
+offset_right = 2.0
+offset_bottom = 59.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 7
 theme_override_styles/normal = SubResource("StyleBoxFlat_p33aa")
@@ -275,7 +275,7 @@ sprite_frames = SubResource("SpriteFrames_cysq5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2133627006]
 position = Vector2(-71, 19)
-zoom = Vector2(2, 2)
+zoom = Vector2(9, 9)
 
 [node name="phone" type="Sprite2D" parent="." unique_id=1007333902]
 position = Vector2(-73, 112)
@@ -283,7 +283,7 @@ scale = Vector2(0.06079102, 0.060791027)
 texture = ExtResource("5_qf13d")
 
 [node name="title" type="Sprite2D" parent="." unique_id=1119215686]
-position = Vector2(-2.999999, 14.999999)
+position = Vector2(-6.0000153, 17)
 scale = Vector2(0.17262618, 0.1726262)
 texture = ExtResource("6_gxppd")
 

@@ -32,14 +32,38 @@ var flags: Dictionary = {
 	"gave_food": false
 }
 
+# Game states
+enum State {
+	MENU,
+	INTRO,
+	GAMEPLAY,
+	END
+}
+
+var current_state: State = State.MENU
+
 # Signals
 signal mood_changed(new_mood: int)
 signal game_won
 signal game_lost
 signal flag_changed(flag_name: String, value: bool)
+signal state_changed(new_state: State)
 
 func _ready() -> void:
 	pass
+
+func start_game() -> void:
+	# Called when start button is pressed
+	# Reset game state
+	mood = 50
+	for key in flags:
+		flags[key] = false
+	change_state(State.INTRO)
+
+func change_state(new_state: State) -> void:
+	current_state = new_state
+	state_changed.emit(new_state)
+	print("[STATE] Changed to: %s" % State.keys()[new_state])
 
 func set_mood(new_mood: int) -> void:
 	var old_mood = mood

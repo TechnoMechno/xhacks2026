@@ -126,6 +126,14 @@ func _input(event: InputEvent) -> void:
 			girlfriend.reset_conversation()
 			print("[Main] Reset conversation with Penny")
 
+	# Debug: Press = to win, - to lose
+	if event is InputEventKey and event.pressed and event.keycode == KEY_EQUAL:
+		GameState.set_mood(GameState.MOOD_WIN_THRESHOLD)
+		print("[Main] DEBUG: Triggered win state")
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_MINUS:
+		GameState.set_mood(GameState.MOOD_LOSE_THRESHOLD)
+		print("[Main] DEBUG: Triggered lose state")
+
 func _on_mood_changed(new_mood: int) -> void:
 	# Update portrait when mood changes (if dialogue is open)
 	if dialogue_ui and dialogue_ui.visible:

@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func _on_start_pressed() -> void:
 	GameState.start_game()
-	get_tree().change_scene_to_file("res://Scenes/main/main.tscn")
+	get_tree().change_scene_to_file("res://Scenes/IntroCutscene.tscn")
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

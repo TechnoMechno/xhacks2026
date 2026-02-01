@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dqcc5hm1qeadg"]
 
-[ext_resource type="Texture2D" uid="uid://qqmvcp417vf8" path="res://Assets/Girlfriend/haley.png" id="1_646qc"]
+[ext_resource type="Texture2D" uid="uid://dbmu3d4cvwwbn" path="res://Assets/Girlfriend/standing_gf.png" id="2_d4t3a"]
 [ext_resource type="Script" uid="uid://brpihp1t55q3c" path="res://Scenes/npc/girlfriend.gd" id="2_gf_brain"]
 [ext_resource type="Script" uid="uid://bupnh0kqklshe" path="res://addons/player2/nodes/Player2AINPC.gd" id="3_player2npc"]
 [ext_resource type="Script" uid="uid://fpb2ysodtcuy" path="res://addons/player2/helpers/tool_call/ToolCallFunctionDefinition.gd" id="4_ebojb"]
@@ -10,36 +10,15 @@
 [ext_resource type="Script" uid="uid://mt8gdygmb5og" path="res://addons/player2/helpers/config/Player2TTSConfig.gd" id="7_5y75h"]
 [ext_resource type="Resource" uid="uid://das4ap6qvtr75" path="res://addons/player2/chat_config.tres" id="8_kedoj"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cnwi5"]
-atlas = ExtResource("1_646qc")
-region = Rect2(0, 32, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qtc8g"]
-atlas = ExtResource("1_646qc")
-region = Rect2(16, 32, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c4say"]
-atlas = ExtResource("1_646qc")
-region = Rect2(32, 32, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4i3od"]
-atlas = ExtResource("1_646qc")
-region = Rect2(48, 32, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_rsfka"]
+atlas = ExtResource("2_d4t3a")
+region = Rect2(0, 0, 15, 30)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yyaj3"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cnwi5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qtc8g")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c4say")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4i3od")
+"texture": SubResource("AtlasTexture_rsfka")
 }],
 "loop": true,
 "name": &"default",
@@ -89,5 +68,5 @@ tool_calls_function_definitions = SubResource("Resource_3a6l0")
 character_config = SubResource("Resource_w8o5i")
 chat_config = ExtResource("8_kedoj")
 
-[node name="MoodAnalyzer" type="Node" parent="." unique_id=1441750762]
+[node name="MoodAnalyzer" type="Node" parent="." unique_id=560689031]
 script = ExtResource("4_mood_analyzer")

@@ -25,9 +25,12 @@ func _input(event):
 func next_animation():
 	# Move to next animation
 	current_animation += 1
-	
+
 	# Check if we've reached the end
 	if current_animation < animations.size():
 		animations[current_animation]["player"].play(animations[current_animation]["anim"])
 	else:
 		print("All animations complete!")
+		# Transition to gameplay
+		GameState.change_state(GameState.State.GAMEPLAY)
+		get_tree().change_scene_to_file("res://Scenes/main/main.tscn")
