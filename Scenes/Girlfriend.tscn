@@ -45,6 +45,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 20.0
+
 [sub_resource type="Resource" id="Resource_3a6l0"]
 Resource = null
 resource_path = "res://Scenes/Girlfriend.tscn::Resource_3a6l0"
@@ -54,7 +57,7 @@ script = ExtResource("5_d4t3a")
 script = ExtResource("7_5y75h")
 tts_speed = 1.1
 tts_default_gender = 1
-voice_id = "01955d76-ed5b-7436-a182-c4d21aaca9fc"
+voice_id = "01955d76-ed5b-7426-8748-4b0e5aea1974"
 
 [sub_resource type="Resource" id="Resource_w8o5i"]
 script = ExtResource("6_rsfka")
@@ -71,6 +74,9 @@ sprite_frames = SubResource("SpriteFrames_yyaj3")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=27034515]
 
 [node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=612790088]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D" unique_id=338470483]
+shape = SubResource("CircleShape2D_interact")
 
 [node name="Marker2D" type="Marker2D" parent="CharacterBody2D" unique_id=1530081386]
 

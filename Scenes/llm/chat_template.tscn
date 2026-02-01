@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://bm6sso6a28eym"]
+
+[ext_resource type="PackedScene" uid="uid://5tdvp5lgxuea" path="res://addons/player2/templates/chat/chat_template.tscn" id="1_log0i"]
+
+[node name="Chat Template" unique_id=1479942833 instance=ExtResource("1_log0i")]

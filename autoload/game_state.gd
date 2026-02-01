@@ -42,9 +42,22 @@ func _ready() -> void:
 	pass
 
 func set_mood(new_mood: int) -> void:
+	var old_mood = mood
 	mood = clamp(new_mood, 0, 100)
+	var delta = mood - old_mood
+	print("[MOOD] %s" % _get_mood_bar(old_mood, delta))
 	mood_changed.emit(mood)
 	_check_win_lose()
+
+func _get_mood_bar(old_mood: int, delta: int) -> String:
+	var bar_length = 20
+	var filled = int((float(mood) / 100.0) * bar_length)
+	var empty = bar_length - filled
+	var bar = "[" + "=".repeat(filled) + "-".repeat(empty) + "]"
+	var delta_str = ""
+	if delta != 0:
+		delta_str = " (%s%d)" % ["+" if delta > 0 else "", delta]
+	return "%d -> %d %s%s" % [old_mood, mood, bar, delta_str]
 
 func apply_mood_delta(delta: int) -> void:
 	set_mood(mood + delta)
@@ -52,12 +65,14 @@ func apply_mood_delta(delta: int) -> void:
 func set_flag(flag_name: String, value: bool = true) -> void:
 	if flag_name in flags:
 		flags[flag_name] = value
+		print("[FLAG] %s = %s" % [flag_name, value])
 		flag_changed.emit(flag_name, value)
 
 func get_flag(flag_name: String) -> bool:
 	return flags.get(flag_name, false)
 
 func apply_intent(intent: String) -> void:
+	print("[INTENT] Detected: '%s'" % intent)
 	# Apply mood changes based on intent
 	if intent in MOOD_DELTA:
 		var delta = MOOD_DELTA[intent]
