@@ -50,14 +50,23 @@ func _on_body_exited(body: Node2D) -> void:
 		nearby_interactables.erase(body)
 
 func _on_area_entered(area: Area2D) -> void:
-	var parent = area.get_parent()
-	if parent and parent.has_method("interact") and parent not in nearby_interactables:
-		nearby_interactables.append(parent)
+	var interactable = _find_interactable(area)
+	if interactable and interactable not in nearby_interactables:
+		nearby_interactables.append(interactable)
 
 func _on_area_exited(area: Area2D) -> void:
-	var parent = area.get_parent()
-	if parent in nearby_interactables:
-		nearby_interactables.erase(parent)
+	var interactable = _find_interactable(area)
+	if interactable in nearby_interactables:
+		nearby_interactables.erase(interactable)
+
+func _find_interactable(node: Node) -> Node:
+	# Traverse up the tree to find a node with interact() method
+	var current = node.get_parent()
+	while current:
+		if current.has_method("interact"):
+			return current
+		current = current.get_parent()
+	return null
 
 func _interact_with_closest() -> void:
 	if nearby_interactables.is_empty():

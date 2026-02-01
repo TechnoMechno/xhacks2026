@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://chat_test_scene"]
+
+[ext_resource type="Script" path="res://Scenes/testing/npc_chat_test.gd" id="1_chat"]
+[ext_resource type="Script" path="res://Scenes/testing/console_input.gd" id="2_input"]
+
+[node name="NPCChatTest" type="Node"]
+script = ExtResource("1_chat")
+
+[node name="ConsoleInput" type="LineEdit" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -40.0
+offset_right = -10.0
+offset_bottom = -10.0
+placeholder_text = "Type your message and press Enter..."
+script = ExtResource("2_input")
