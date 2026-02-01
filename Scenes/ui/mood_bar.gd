@@ -5,17 +5,27 @@ extends TextureProgressBar
 @onready var max_health_label = $MaxHealth
 
 var animation_tween: Tween
-var test_mode = true  # Set to false to disable auto test
+var test_mode = false  # Set to false to disable auto test
 
 func _ready() -> void:
+	# Set visible first
+	visible = true
+	
 	min_value = 0
 	max_value = 100
-	value = 0
-
+	
+	# Initialize with current mood from GameState WITHOUT animation
+	# Set value directly before connecting signals to prevent initial animation
+	var initial_mood = GameState.mood
+	value = initial_mood
+	print("[MoodBar] Initializing with mood: ", initial_mood)
+	
 	if max_health_label:
 		max_health_label.text = str(int(value))
 
+	# Connect AFTER setting initial value
 	GameState.mood_changed.connect(_on_mood_changed)
+	print("[MoodBar] Ready - value set to: ", value)
 
 	# Test animation - automatically fill the bar
 	if test_mode:
