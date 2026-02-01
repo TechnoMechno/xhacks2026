@@ -59,6 +59,5 @@ position = Vector2(0, 8)
 [node name="DetectArea" type="Area2D" parent="." unique_id=2105428115]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=1491232601]
-shape = SubResource("CircleShape2D_detect")
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1226389527]

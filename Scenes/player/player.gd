@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
-const SPEED = 200.0
+const SPEED = 130.0
 
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var detect_area: Area2D = $DetectArea
 
 var nearby_interactables: Array = []
@@ -17,10 +18,28 @@ func _physics_process(_delta: float) -> void:
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	velocity = direction * SPEED
 	move_and_slide()
+	_update_animation(direction)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):  # E key
+	if event.is_action_pressed("ui_accept"):
 		_interact_with_closest()
+
+func _update_animation(direction: Vector2) -> void:
+	if not anim or not anim.sprite_frames:
+		return
+
+	var is_moving = direction.length() > 0.01
+	var base = "walk_" if is_moving else "idle_"
+
+	var dir_name = "down"
+	if abs(direction.x) > abs(direction.y):
+		dir_name = "right" if direction.x > 0 else "left"
+	elif direction.length() > 0:
+		dir_name = "down" if direction.y > 0 else "up"
+
+	var anim_name = base + dir_name
+	if anim.sprite_frames.has_animation(anim_name) and anim.animation != anim_name:
+		anim.play(anim_name)
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.has_method("interact") and body not in nearby_interactables:
@@ -53,7 +72,6 @@ func _interact_with_closest() -> void:
 	if nearby_interactables.is_empty():
 		return
 
-	# Get closest interactable
 	var closest = nearby_interactables[0]
 	var closest_dist = global_position.distance_to(closest.global_position)
 

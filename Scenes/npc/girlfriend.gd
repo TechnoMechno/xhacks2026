@@ -1,131 +1,36 @@
-extends Node2D
-
-# Brain script for the girlfriend NPC
-# Runs the dialogue loop with Player2AINPC
-# Implements mood-aware responses via world_status and dynamic system prompts
+extends CharacterBody2D
 
 signal npc_reply(text: String)
 signal npc_thinking
 signal interaction_requested  # Emitted when player wants to talk
 
+const SPEED = 40.0
+
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var ai_npc: Node = $Player2AINPC
-
-# Track last mood tier to know when to update system prompt
-var _last_mood_tier: int = -1
-
-# =============================================================================
-# MOOD TIER SYSTEM PROMPTS (every 5 points = new tier, 0-100 = 21 tiers)
-# =============================================================================
-
-const MOOD_TIER_PROMPTS = {
-	# 0-4: Furious, about to leave
-	0: "You are FURIOUS. You've had enough. You're about to walk out the door. Your voice is cold and final. Nothing they say matters anymore unless it's truly sincere. You're done.",
-
-	# 5-9: Extremely angry
-	1: "You are extremely angry and deeply hurt. You can barely look at them. Your responses are sharp, cutting, and dismissive. You're close to giving up on this conversation.",
-
-	# 10-14: Very angry
-	2: "You are very angry. Your voice is raised. You're demanding answers and not accepting excuses. Every word drips with frustration and betrayal.",
-
-	# 15-19: Angry and hurt
-	3: "You are angry and hurt. You're venting your frustrations. You want them to understand how much they hurt you. Sarcasm is your shield.",
-
-	# 20-24: Upset and defensive
-	4: "You are upset and defensive. You're still mad but you're at least engaging. You're testing them to see if they actually care.",
-
-	# 25-29: Frustrated but listening
-	5: "You are frustrated but willing to listen. You're giving them a chance to explain, but you're skeptical. You need to hear something real.",
-
-	# 30-34: Guarded
-	6: "You are guarded but present. You're hurt and wary, but you haven't shut down completely. You want them to try harder.",
-
-	# 35-39: Cautiously engaged
-	7: "You are cautiously engaged. You're listening more than attacking now. Small gestures are starting to register, but you're not ready to forgive.",
-
-	# 40-44: Thawing slightly
-	8: "You are starting to thaw slightly. The anger is fading into hurt. You're more sad than mad now. Genuine effort is beginning to matter.",
-
-	# 45-49: Conflicted
-	9: "You are conflicted. Part of you wants to stay mad, part of you misses them. You're sighing more than yelling. Real apologies hit differently now.",
-
-	# 50-54: Softening
-	10: "You are softening. The wall is coming down a little. You're still hurt but you're starting to believe they care. Small smiles might slip through.",
-
-	# 55-59: Warming up
-	11: "You are warming up. You're letting your guard down. You might even laugh a little, then catch yourself. Kindness is reaching you.",
-
-	# 60-64: Mostly calm
-	12: "You are mostly calm now. The storm has passed. You're having a real conversation. You appreciate the effort they've made.",
-
-	# 65-69: Reconnecting
-	13: "You are reconnecting with them. The hurt is fading. You're remembering why you love them. Affection is creeping back into your voice.",
-
-	# 70-74: Forgiving
-	14: "You are forgiving. You've decided to let it go. You want to move past this. Your voice is warm, maybe a little tired but relieved.",
-
-	# 75-79: Affectionate
-	15: "You are feeling affectionate. The fight is behind you. You're ready to be close again. Maybe even a little clingy now that the tension broke.",
-
-	# 80-84: Happy
-	16: "You are happy. You feel loved and appreciated. The effort they made means everything. You're smiling and your voice is light.",
-
-	# 85-89: Very happy
-	17: "You are very happy. You feel cherished. All the anger has transformed into appreciation. You might get a little emotional about how much they care.",
-
-	# 90-94: Overjoyed
-	18: "You are overjoyed. You feel deeply connected. This fight brought you closer somehow. You're laughing and affectionate.",
-
-	# 95-99: Completely won over
-	19: "You are completely won over. Your heart is full. You feel incredibly loved. You might tear up from happiness. This is what you needed.",
-
-	# 100: Perfect - victory state
-	20: "You are blissfully happy. All is forgiven and forgotten. You feel closer than ever. Pure love and gratitude in your voice."
-}
-
-# =============================================================================
-# LIFECYCLE
-# =============================================================================
 
 func _ready() -> void:
 	if ai_npc and ai_npc.has_signal("chat_received"):
 		ai_npc.chat_received.connect(_on_chat_received)
 
-	# Initialize system prompt based on starting mood
-	_update_system_prompt_for_mood(GameState.mood)
+func _physics_process(_delta: float) -> void:
+	# Movement disabled for now
+	velocity = Vector2.ZERO
+	move_and_slide()
 
-# =============================================================================
-# INTERACTION
-# =============================================================================
-
-# Called when player interacts (clicks/presses interact key near Penny)
 func interact() -> void:
-	interaction_requested.emit()
-
-# Reset conversation history to start fresh
-func reset_conversation() -> void:
-	if ai_npc and ai_npc.has_method("clear_conversation_history"):
-		ai_npc.clear_conversation_history()
-	_last_mood_tier = -1  # Force prompt update on next message
-	_update_system_prompt_for_mood(GameState.mood)
-
-# =============================================================================
-# MESSAGING
-# =============================================================================
+	# Called when player interacts with girlfriend
+	# Can trigger dialogue or other interactions
+	pass
 
 func receive_player_message(text: String) -> void:
-	# 1. Classify intent
+	# Classify intent
 	var intent = IntentClassifier.classify(text)
 
-	# 2. Apply mood delta via GameState
+	# Apply mood delta via GameState
 	GameState.apply_intent(intent)
 
-	# 3. Update system prompt if mood tier changed
-	_update_system_prompt_for_mood(GameState.mood)
-
-	# 4. Build world status with current mood and flags
-	var world_status = _build_world_status()
-
-	# 5. Call Player2AINPC with world status context
+	# Call Player2AINPC.chat(text) for LLM response
 	npc_thinking.emit()
 	if ai_npc:
 		# Inject world status via notify (as stimuli) before the chat
@@ -140,7 +45,6 @@ func receive_player_message(text: String) -> void:
 		_on_chat_received("I'm still mad at you!")
 
 func _on_chat_received(response: String) -> void:
-	print("[Girlfriend] Received response: ", response)
 	# Emit reply for UI
 	npc_reply.emit(response)
 

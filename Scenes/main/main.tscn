@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b2dlswso0c1qf"]
 
 [ext_resource type="PackedScene" uid="uid://cnpj4ib4tw0xh" path="res://Scenes/world.tscn" id="1_b20jg"]
-[ext_resource type="PackedScene" uid="uid://cm0itv8s4e3ns" path="res://Scenes/player/Player.tscn" id="2_w1fgp"]
+[ext_resource type="PackedScene" uid="uid://cm0itv8s4e3ns" path="res://Scenes/player/player.tscn" id="2_w1fgp"]
 [ext_resource type="PackedScene" uid="uid://dqcc5hm1qeadg" path="res://Scenes/Girlfriend.tscn" id="3_4etoo"]
 [ext_resource type="Script" path="res://Scenes/main/main.gd" id="4_main"]
 [ext_resource type="PackedScene" uid="uid://dialogue_ui_simple" path="res://Scenes/ui/dialogue_ui.tscn" id="5_dialogue"]
@@ -16,10 +16,8 @@ zoom = Vector2(0.7, 0.7)
 [node name="world" parent="." instance=ExtResource("1_b20jg")]
 position = Vector2(186, 188)
 
-[node name="player" parent="." instance=ExtResource("2_w1fgp")]
-position = Vector2(135, 196)
-
-[node name="Girlfriend" parent="." instance=ExtResource("3_4etoo")]
+[node name="girlfriend" parent="." unique_id=888624562 instance=ExtResource("3_4etoo")]
 position = Vector2(316, 199)
 
-[node name="DialogueUI" parent="." instance=ExtResource("5_dialogue")]
+[node name="player" parent="." unique_id=471510802 instance=ExtResource("2_w1fgp")]
+position = Vector2(145, 200)
