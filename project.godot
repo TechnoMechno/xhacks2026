@@ -95,8 +95,8 @@ interact_dialogue={
 
 [player2]
 
-client_id="019c15d2-bf7c-7928-9c9a-87665310e6ad"
 hide_opening_prompt=false
+client_id="019c15d2-bf7c-7928-9c9a-87665310e6ad"
 
 [rendering]
 
