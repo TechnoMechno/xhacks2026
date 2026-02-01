@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://lf68bgyej3dq"]
+
+[ext_resource type="PackedScene" uid="uid://dkb8xfwvv2ba1" path="res://Scenes/ui/mood_bar.tscn" id="1_p5wc4"]
+[ext_resource type="PackedScene" uid="uid://cdhf3x48ikbaa" path="res://Scenes/ui/dialogue.tscn" id="2_hjv8g"]
+[ext_resource type="PackedScene" uid="uid://d4blvgc14pb0g" path="res://Scenes/ui/phone.tscn" id="3_jhx1v"]
+[ext_resource type="PackedScene" uid="uid://crx0l1kaj3djq" path="res://Scenes/ui/end_screen.tscn" id="4_p5e08"]
+
+[node name="HUD" type="CanvasLayer"]
+layer=10
+
+[node name="MoodBar" parent="." instance=ExtResource("1_p5wc4")]
+
+[node name="Dialogue" parent="." instance=ExtResource("2_hjv8g")]
+
+[node name="Phone" parent="." instance=ExtResource("3_jhx1v")]
+
+[node name="EndScreen" parent="." instance=ExtResource("4_p5e08")]
