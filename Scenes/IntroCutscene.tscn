@@ -1,0 +1,291 @@
+[gd_scene format=3 uid="uid://b31dnpflyq17w"]
+
+[ext_resource type="Script" uid="uid://c8u327xcru12h" path="res://Scenes/intro_cutscene.gd" id="1_p33aa"]
+[ext_resource type="PackedScene" uid="uid://cnpj4ib4tw0xh" path="res://Scenes/world.tscn" id="1_ub2q7"]
+[ext_resource type="Texture2D" uid="uid://cq7o3301yoxmt" path="res://Assets/player/player.png" id="2_cwr80"]
+[ext_resource type="Texture2D" uid="uid://dbmu3d4cvwwbn" path="res://Assets/Girlfriend/standing_gf.png" id="3_o4cn7"]
+[ext_resource type="Texture2D" uid="uid://dfvp7ghjyfywl" path="res://Assets/phone_noBack.png" id="5_qf13d"]
+[ext_resource type="Texture2D" uid="uid://da8y7k2j22bk7" path="res://Assets/titlecard/Adobe Express - file.png" id="6_gxppd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p33aa"]
+bg_color = Color(0.8132577, 0.81325775, 0.8132574, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4cn7"]
+atlas = ExtResource("2_cwr80")
+region = Rect2(0, 32, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p33aa"]
+atlas = ExtResource("2_cwr80")
+region = Rect2(16, 32, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qf13d"]
+atlas = ExtResource("2_cwr80")
+region = Rect2(32, 32, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gxppd"]
+atlas = ExtResource("2_cwr80")
+region = Rect2(48, 32, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_iy2k6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o4cn7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p33aa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qf13d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gxppd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_p33aa"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Label:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../phone:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-73, 112)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Camera2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-71, 19)]
+}
+
+[sub_resource type="Animation" id="Animation_o4cn7"]
+resource_name = "appear"
+length = 2.4666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.033333335, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Label:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.9333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_iy2k6"]
+resource_name = "pan camera"
+length = 3.2666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../phone:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-73, 17), Vector2(-73, 150)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Camera2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.93333334, 1.6666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-71, 19), Vector2(-5, 19)]
+}
+
+[sub_resource type="Animation" id="Animation_gxppd"]
+resource_name = "show phone"
+length = 1.3666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Label:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../phone:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6333333, 1.3333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-73, 112), Vector2(-73, 17)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p33aa"]
+_data = {
+&"RESET": SubResource("Animation_p33aa"),
+&"appear": SubResource("Animation_o4cn7"),
+&"pan camera": SubResource("Animation_iy2k6"),
+&"show phone": SubResource("Animation_gxppd")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy2k6"]
+atlas = ExtResource("3_o4cn7")
+region = Rect2(0, 0, 15, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cysq5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy2k6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_cysq5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_7h0lc"]
+resource_name = "appear"
+length = 1.1666666
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qkryq"]
+_data = {
+&"RESET": SubResource("Animation_cysq5"),
+&"appear": SubResource("Animation_7h0lc")
+}
+
+[node name="IntroCutscene" type="Node2D" unique_id=1842939034]
+script = ExtResource("1_p33aa")
+
+[node name="world" parent="." unique_id=1539484535 instance=ExtResource("1_ub2q7")]
+
+[node name="Label" type="Label" parent="." unique_id=682645036]
+offset_left = -142.0
+offset_top = 34.0
+offset_right = 8.0
+offset_bottom = 59.00003
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 7
+theme_override_styles/normal = SubResource("StyleBoxFlat_p33aa")
+text = "Its 2am. You had too much fun with your boys and forgot to check your phone."
+autowrap_mode = 2
+
+[node name="player" type="CharacterBody2D" parent="." unique_id=1616863150]
+visible = false
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="player" unique_id=51252912]
+position = Vector2(-71, 15)
+sprite_frames = SubResource("SpriteFrames_iy2k6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="player" unique_id=2122678673]
+libraries/ = SubResource("AnimationLibrary_p33aa")
+
+[node name="girlfriend" type="CharacterBody2D" parent="." unique_id=1583610068]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="girlfriend" unique_id=869085595]
+position = Vector2(40, 14)
+sprite_frames = SubResource("SpriteFrames_cysq5")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2133627006]
+position = Vector2(-71, 19)
+zoom = Vector2(2, 2)
+
+[node name="phone" type="Sprite2D" parent="." unique_id=1007333902]
+position = Vector2(-73, 112)
+scale = Vector2(0.06079102, 0.060791027)
+texture = ExtResource("5_qf13d")
+
+[node name="title" type="Sprite2D" parent="." unique_id=1119215686]
+position = Vector2(-2.999999, 14.999999)
+scale = Vector2(0.17262618, 0.1726262)
+texture = ExtResource("6_gxppd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="title" unique_id=1189624646]
+libraries/ = SubResource("AnimationLibrary_qkryq")

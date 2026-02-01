@@ -101,6 +101,9 @@ func receive_player_message(text: String) -> void:
 	# var intent = IntentClassifier.classify(text)
 	# GameState.apply_intent(intent)
 
+	# Update system prompt based on new mood
+	_update_system_prompt_for_mood(GameState.mood)
+
 	# Call Player2AINPC.chat(text) for LLM response
 	npc_thinking.emit()
 	if ai_npc:
@@ -217,6 +220,10 @@ func _update_system_prompt_for_mood(mood: int) -> void:
 	var flags_context = _get_flags_context()
 
 	var new_system_message = base_behavior
+
+	# Add core personality directives
+	new_system_message += "\n\nCore rules: Keep responses SHORT (1-3 sentences). Be BRUTALLY sarcastic and sharp-tongued. NEVER suggest going to bed, leaving, or ending conversation - STAY IN THE FIGHT!"
+
 	if not flags_context.is_empty():
 		new_system_message += "\n\n" + flags_context
 
@@ -234,6 +241,10 @@ func _build_world_status() -> String:
 
 	# Mood description (without numbers)
 	parts.append("Your current emotional state: " + _get_mood_description(mood))
+
+	# Add escalation hint when mood is low
+	if mood < 30:
+		parts.append("IMPORTANT: Keep confronting them! Do NOT suggest leaving or going to bed. Stay engaged and angry!")
 
 	# Flags context
 	var flags_status = _get_flags_status()
@@ -261,9 +272,9 @@ func _get_mood_description(mood: int) -> String:
 	elif mood >= 20:
 		return "You're very angry. Sharp and defensive."
 	elif mood >= 10:
-		return "You're furious. Close to walking out."
+		return "You're LIVID. Almost at breaking point - one more misstep and you might physically react."
 	else:
-		return "You've had enough. You're done with this conversation."
+		return "You're ENRAGED beyond words. You're about to SLAP them. Stay confrontational - do NOT walk away, CONFRONT THEM!"
 
 ## Get context string about completed actions
 func _get_flags_context() -> String:
