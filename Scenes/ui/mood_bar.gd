@@ -1,26 +1,46 @@
-extends ProgressBar
+extends TextureProgressBar
 
-# Updates based on GameState.mood_changed signal
+# Smooth animated mood bar (heart bar)
+
+@onready var max_health_label = $MaxHealth
+
+var animation_tween: Tween
+var test_mode = true  # Set to false to disable auto test
 
 func _ready() -> void:
 	min_value = 0
 	max_value = 100
-	value = GameState.mood
+	value = 0
+
+	if max_health_label:
+		max_health_label.text = str(int(value))
 
 	GameState.mood_changed.connect(_on_mood_changed)
-	_update_color(GameState.mood)
+
+	# Test animation - automatically fill the bar
+	if test_mode:
+		await get_tree().create_timer(1.0).timeout
+		animate_to(100)
 
 func _on_mood_changed(new_mood: int) -> void:
-	value = new_mood
-	_update_color(new_mood)
+	animate_to(new_mood)
 
-func _update_color(mood_value: int) -> void:
-	# Change color based on mood
-	if mood_value >= 80:
-		modulate = Color(0.2, 1.0, 0.2)  # Green
-	elif mood_value >= 50:
-		modulate = Color(1.0, 1.0, 0.2)  # Yellow
-	elif mood_value >= 20:
-		modulate = Color(1.0, 0.6, 0.2)  # Orange
-	else:
-		modulate = Color(1.0, 0.2, 0.2)  # Red
+func animate_to(new_value: int) -> void:
+	# Kill previous animation if running
+	if animation_tween:
+		animation_tween.kill()
+
+	var start_value = value
+
+	# Animate bar fill from current value to new value over 2 seconds
+	animation_tween = create_tween()
+	animation_tween.set_trans(Tween.TRANS_CUBIC)
+	animation_tween.set_ease(Tween.EASE_OUT)
+
+	# Animate both the bar value and the label number simultaneously
+	animation_tween.tween_property(self, "value", new_value, 2.0)
+	animation_tween.parallel().tween_method(_update_label_value, start_value, float(new_value), 2.0)
+
+func _update_label_value(val: float) -> void:
+	if max_health_label:
+		max_health_label.text = str(int(val))

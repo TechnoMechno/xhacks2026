@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://crx0l1kaj3djq"]
+
+[ext_resource type="Script" path="res://Scenes/ui/end_screen.gd" id="1_1eiwu"]
+
+[node name="PanelContainer" type="PanelContainer"]
+anchors_left=0.5
+anchors_top=0.5
+anchors_right=0.5
+anchors_bottom=0.5
+offset_left=-200.0
+offset_top=-150.0
+offset_right=200.0
+offset_bottom=150.0
+script=ExtResource("1_1eiwu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode=2
+alignment=1
+theme_override_constants/separation=24
+
+[node name="MessageLabel" type="Label" parent="VBoxContainer"]
+layout_mode=2
+text="You Win! She forgave you!"
+horizontal_alignment=1
+
+[node name="RestartButton" type="Button" parent="VBoxContainer"]
+layout_mode=2
+text="Try Again"
