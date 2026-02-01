@@ -36,7 +36,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_border")
 
-[node name="VLCMediaPlayer" type="VLCMediaPlayer" parent="BorderPanel"]
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="BorderPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+expand = true

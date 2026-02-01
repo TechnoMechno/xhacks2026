@@ -1,34 +1,27 @@
 extends CanvasLayer
 
-# Win cutscene that plays the victory video using VLC plugin
+# Win cutscene that plays the victory video using built-in VideoStreamPlayer
 
-@onready var video_player: VLCMediaPlayer = $BorderPanel/VLCMediaPlayer
+@onready var video_player: VideoStreamPlayer = $BorderPanel/VideoStreamPlayer
 
 signal cutscene_finished
 
 var _finished: bool = false
-var _playing: bool = false
 
 func _ready() -> void:
-	# Load media using VLCMedia.load_from_file
-	var media = VLCMedia.load_from_file("res://videos/win.MP4")
-	if media:
-		video_player.set_media(media)
-		# Start playing
+	# Load video using VideoStreamPlayer
+	var video_stream = load("res://videos/win.MP4")
+	if video_stream:
+		video_player.stream = video_stream
 		video_player.play()
-		_playing = true
-		print("[WinCutscene] VLC video started playing")
+		print("[WinCutscene] Video started playing")
+		# Connect the finished signal
+		video_player.finished.connect(_on_video_finished)
 	else:
 		push_error("[WinCutscene] Failed to load video file")
 		# Fallback - go to end screen after a delay
 		await get_tree().create_timer(2.0).timeout
 		_on_video_finished()
-
-func _process(_delta: float) -> void:
-	# Check if video finished playing by polling state
-	if _playing and not _finished:
-		if video_player and not video_player.is_playing():
-			_on_video_finished()
 
 func _input(event: InputEvent) -> void:
 	# Allow skipping with space or click
@@ -42,11 +35,9 @@ func _on_video_finished() -> void:
 	if _finished:
 		return
 	_finished = true
-	_playing = false
 	print("[WinCutscene] Video finished")
-	# VLCMediaPlayer doesn't have stop(), just pause it
 	if video_player:
-		video_player.pause()
+		video_player.stop()
 	cutscene_finished.emit()
 	# Go directly to menu
 	GameState.change_state(GameState.State.MENU)
