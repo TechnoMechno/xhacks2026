@@ -14,10 +14,15 @@ func _ready() -> void:
 func show_result(player_won: bool) -> void:
 	won = player_won
 	if won:
-		message_label.text = "You Win! She forgave you!"
+		# Play win cutscene video instead of showing end screen
+		print("[EndScreen] Player won! Transitioning to win cutscene...")
+		get_tree().change_scene_to_file("res://Scenes/ui/win_cutscene.tscn")
+		return
 	else:
-		message_label.text = "Game Over. She's done with you."
-	visible = true
+		# Play lose cutscene video instead of showing end screen
+		print("[EndScreen] Player lost! Transitioning to lose cutscene...")
+		get_tree().change_scene_to_file("res://Scenes/ui/lose_cutscene.tscn")
+		return
 
 func _on_restart_pressed() -> void:
 	GameState.change_state(GameState.State.MENU)
