@@ -24,4 +24,8 @@ position = Vector2(145, 200)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1501745251]
 
-[node name="MoodBar" parent="HUD" instance=ExtResource("5_mood")]
+[node name="MoodBar" parent="HUD" unique_id=215596481 instance=ExtResource("5_mood")]
+offset_left = -100.0
+offset_top = 26.0
+offset_right = -37.0
+offset_bottom = 157.0
