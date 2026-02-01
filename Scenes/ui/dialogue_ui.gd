@@ -12,6 +12,8 @@ signal message_sent(text: String)
 @onready var response_area: RichTextLabel = $DialogueBox/ResponseArea
 @onready var input_box: LineEdit = $DialogueBox/TypingInputBox
 @onready var send_button: TextureButton = $DialogueBox/SendButton
+@onready var mic_button: TextureButton = $DialogueBox/MicButton
+@onready var stt: Node = $Player2STT
 
 var is_open: bool = false
 
@@ -26,6 +28,15 @@ func _ready() -> void:
 	# Connect send button
 	if send_button:
 		send_button.pressed.connect(_on_send_button_pressed)
+	
+	# Connect mic button (hold to record)
+	if mic_button:
+		mic_button.button_down.connect(_on_mic_button_down)
+		mic_button.button_up.connect(_on_mic_button_up)
+	
+	# Connect STT signals
+	if stt:
+		stt.stt_received.connect(_on_stt_received)
 
 func _input(event: InputEvent) -> void:
 	# Close on Escape
@@ -48,7 +59,7 @@ func _send_message() -> void:
 		return
 
 	# Display player message in response area (each on new line)
-	response_area.append_text("[color=cyan]You:[/color] %s\n" % text)
+	response_area.append_text("[color=#8B4513]You:[/color] %s\n" % text)
 
 	# Scroll to bottom to show latest message
 	await get_tree().process_frame
@@ -59,3 +70,39 @@ func _send_message() -> void:
 
 	# Clear input
 	input_box.clear()
+
+func add_npc_message(text: String) -> void:
+	# Display girlfriend's response
+	response_area.append_text("[color=#D2691E]Penny:[/color] %s\n" % text)
+	
+	# Scroll to bottom
+	await get_tree().process_frame
+	response_area.scroll_to_line(response_area.get_line_count() - 1)
+
+func add_thinking_message() -> void:
+	# Display thinking indicator
+	response_area.append_text("[color=gray][Thinking...][/color]\n")
+	
+	# Scroll to bottom
+	await get_tree().process_frame
+	response_area.scroll_to_line(response_area.get_line_count() - 1)
+
+func _on_mic_button_down() -> void:
+	# Start recording when mic button is pressed
+	if stt and stt.has_method("start_stt"):
+		stt.start_stt()
+		print("[DialogueUI] Started STT recording")
+
+func _on_mic_button_up() -> void:
+	# Stop recording when mic button is released
+	if stt and stt.has_method("stop_stt"):
+		stt.stop_stt()
+		print("[DialogueUI] Stopped STT recording")
+
+func _on_stt_received(message: String) -> void:
+	# When speech-to-text is received, put it in the input box
+	if input_box:
+		input_box.text = message
+		print("[DialogueUI] STT received: ", message)
+		# Automatically send the message
+		_send_message()

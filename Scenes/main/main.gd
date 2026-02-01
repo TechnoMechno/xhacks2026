@@ -26,6 +26,8 @@ func _ready() -> void:
 	# Wire girlfriend interaction to dialogue
 	if girlfriend:
 		girlfriend.interaction_requested.connect(_on_girlfriend_interaction)
+		girlfriend.npc_reply.connect(_on_girlfriend_reply)
+		girlfriend.npc_thinking.connect(_on_girlfriend_thinking)
 		print("[Main] Connected to girlfriend.interaction_requested")
 	else:
 		print("[Main] ERROR: girlfriend is null!")
@@ -34,6 +36,7 @@ func _ready() -> void:
 	if dialogue_ui:
 		dialogue_ui.dialogue_opened.connect(_on_dialogue_opened)
 		dialogue_ui.dialogue_closed.connect(_on_dialogue_closed)
+		dialogue_ui.message_sent.connect(_on_player_message_sent)
 		print("[Main] Connected to dialogue_ui signals")
 	else:
 		print("[Main] ERROR: dialogue_ui is null!")
@@ -46,6 +49,21 @@ func _on_girlfriend_interaction() -> void:
 		dialogue_ui.visible = true
 	else:
 		print("[Main] ERROR: dialogue_ui is null in interaction handler!")
+
+func _on_player_message_sent(text: String) -> void:
+	# Forward player message to girlfriend
+	if girlfriend and girlfriend.has_method("receive_player_message"):
+		girlfriend.receive_player_message(text)
+
+func _on_girlfriend_reply(text: String) -> void:
+	# Display girlfriend response in dialogue UI
+	if dialogue_ui and dialogue_ui.has_method("add_npc_message"):
+		dialogue_ui.add_npc_message(text)
+
+func _on_girlfriend_thinking() -> void:
+	# Show thinking indicator in dialogue UI
+	if dialogue_ui and dialogue_ui.has_method("add_thinking_message"):
+		dialogue_ui.add_thinking_message()
 
 func _on_dialogue_opened() -> void:
 	# Freeze player
