@@ -22,6 +22,7 @@ func _ready() -> void:
 	# Game state signals
 	GameState.game_won.connect(_on_game_won)
 	GameState.game_lost.connect(_on_game_lost)
+	GameState.mood_changed.connect(_on_mood_changed)
 
 	# Wire girlfriend interaction to dialogue
 	if girlfriend:
@@ -47,6 +48,7 @@ func _on_girlfriend_interaction() -> void:
 	if dialogue_ui:
 		print("[Main] Showing visual dialogue box")
 		dialogue_ui.visible = true
+		# Portrait will animate in automatically via visibility_changed signal
 	else:
 		print("[Main] ERROR: dialogue_ui is null in interaction handler!")
 
@@ -126,3 +128,35 @@ func _input(event: InputEvent) -> void:
 		if girlfriend and girlfriend.has_method("reset_conversation"):
 			girlfriend.reset_conversation()
 			print("[Main] Reset conversation with Penny")
+
+func _on_mood_changed(new_mood: int) -> void:
+	# Update portrait when mood changes (if dialogue is open)
+	if dialogue_ui and dialogue_ui.visible:
+		_update_portrait()
+
+func _update_portrait() -> void:
+	"""Update the dialogue portrait based on current mood"""
+	if not dialogue_ui or not dialogue_ui.has_method("show_portrait"):
+		return
+	
+	var mood = GameState.mood
+	var portrait_name = "neutral"
+	
+	# Map mood values to portrait expressions
+	if mood >= 80:
+		portrait_name = "happy"
+	elif mood >= 65:
+		portrait_name = "soft_smile"
+	elif mood >= 50:
+		portrait_name = "neutral"
+	elif mood >= 35:
+		portrait_name = "sad"
+	elif mood >= 20:
+		portrait_name = "angry"
+	elif mood >= 10:
+		portrait_name = "furious"
+	else:
+		portrait_name = "crying"
+	
+	dialogue_ui.show_portrait(portrait_name)
+	print("[Main] Updated portrait to: ", portrait_name, " (mood: ", mood, ")")

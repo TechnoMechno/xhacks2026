@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://xrdrqh624cl1" path="res://Assets/dialogue/micbutton-normal.png" id="7_yvxix"]
 [ext_resource type="Texture2D" uid="uid://byxcuxx6dlqdp" path="res://Assets/dialogue/micbutton-pressed.png" id="8_5q4p5"]
 [ext_resource type="Texture2D" uid="uid://y13f814oqw14" path="res://Assets/dialogue/micbutton-hover.png" id="9_cgyok"]
+[ext_resource type="Texture2D" uid="uid://cyn8orpikd4jf" path="res://Assets/Girlfriend/portraits/neutral.png" id="10_neutral"]
 
 [node name="DialogueUI" type="CanvasLayer" unique_id=1689415567]
 layer = 10
@@ -34,6 +35,24 @@ offset_left = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_dialogue_box")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PortraitClip" type="Control" parent="DialogueBox" unique_id=456789122]
+layout_mode = 0
+offset_left = 1098.0
+offset_top = 523.0
+offset_right = 1431.0
+offset_bottom = 856.0
+clip_contents = true
+
+[node name="Portrait" type="TextureRect" parent="DialogueBox/PortraitClip" unique_id=456789123]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 333.0
+offset_right = 333.0
+offset_bottom = 666.0
+texture = ExtResource("10_neutral")
 expand_mode = 1
 stretch_mode = 5
 
