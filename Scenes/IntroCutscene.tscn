@@ -304,7 +304,7 @@ offset_bottom = 59.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 7
 theme_override_styles/normal = SubResource("StyleBoxFlat_p33aa")
-text = "Its 2am. You had too much fun with your boys and forgot to check your phone."
+text = "Its 2AM. You had too much fun with your boys and forgot to check your phone...."
 autowrap_mode = 2
 
 [node name="player" type="CharacterBody2D" parent="." unique_id=1616863150]
@@ -345,3 +345,12 @@ stream = ExtResource("7_iy2k6")
 
 [node name="explosion" type="AudioStreamPlayer2D" parent="." unique_id=16331061]
 stream = ExtResource("8_cysq5")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=398405289]
+z_index = -10
+offset_left = -244.0
+offset_top = -201.0
+offset_right = -204.0
+offset_bottom = -161.0
+scale = Vector2(13.055161, 10.418289)
+color = Color(0, 0, 0, 1)
