@@ -158,6 +158,9 @@ Output: {"mood": "Furious", "score": 32, "interaction_type": "antagonistic", "po
 Now analyze the following player message:"""
 
 func _ready() -> void:
+	# Load environment variables from .env file
+	_load_env_file()
+	
 	# Create HTTPRequest node
 	http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -326,3 +329,31 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 		print("\n[MoodAnalyzer] ❌ ERROR: No choices in API response")
 		push_error("[MoodAnalyzer] No choices in response")
 		analysis_failed.emit("No choices in API response")
+
+## Load environment variables from .env file
+func _load_env_file() -> void:
+	var env_path = "res://.env"
+	if FileAccess.file_exists(env_path):
+		var file = FileAccess.open(env_path, FileAccess.READ)
+		if file:
+			print("[MoodAnalyzer] Loading .env file...")
+			while not file.eof_reached():
+				var line = file.get_line().strip_edges()
+				# Skip empty lines and comments
+				if line.is_empty() or line.begins_with("#"):
+					continue
+				# Parse KEY=VALUE format
+				if "=" in line:
+					var parts = line.split("=", true, 1)
+					if parts.size() == 2:
+						var key = parts[0].strip_edges()
+						var value = parts[1].strip_edges()
+						# Set environment variable
+						OS.set_environment(key, value)
+						print("[MoodAnalyzer] Loaded env var: ", key)
+			file.close()
+			print("[MoodAnalyzer] .env file loaded successfully")
+		else:
+			print("[MoodAnalyzer] ⚠️ Could not open .env file")
+	else:
+		print("[MoodAnalyzer] ℹ️ No .env file found at ", env_path)

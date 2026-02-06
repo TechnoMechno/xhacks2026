@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="AngryGirlFriend1"
-run/main_scene="uid://b2dlswso0c1qf"
+run/main_scene="uid://hyrn8fyfi6s"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 

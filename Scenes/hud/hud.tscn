@@ -9,10 +9,10 @@
 layer = 10
 
 [node name="MoodBar" parent="." unique_id=1201159374 instance=ExtResource("1_p5wc4")]
-offset_left = 1246.0
-offset_top = 17.0
-offset_right = 1396.0
-offset_bottom = 117.0
+offset_left = 1244.0
+offset_top = 31.0
+offset_right = 1364.0
+offset_bottom = 251.0
 
 [node name="Dialogue" parent="." unique_id=729229051 instance=ExtResource("2_hjv8g")]
 

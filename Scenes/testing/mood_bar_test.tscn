@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://dkb8xfwvv2ba1" path="res://Scenes/ui/mood_bar.tscn" id="1"]
+[ext_resource type="Script" path="res://Scenes/testing/mood_bar_test.gd" id="2"]
+
+[node name="MoodBarTest" type="Node2D"]
+script = ExtResource("2")
+
+[node name="MoodBar" parent="." instance=ExtResource("1")]
+offset_left = 100.0
+offset_top = 100.0
+offset_right = 250.0
+offset_bottom = 200.0
+
+[node name="Instructions" type="Label" parent="."]
+offset_left = 100.0
+offset_top = 300.0
+offset_right = 700.0
+offset_bottom = 450.0
+theme_override_font_sizes/font_size = 20
+text = "MoodBar Test Scene
+
+Automatic tests will run:
+1. Mood → 75 (after 2s)
+2. Mood → 30 (after 5s)
+3. Mood → 100 (after 8s)
+
+Manual tests (press keys):
+1 = Set mood to 0
+2 = Set mood to 25
+3 = Set mood to 50
+4 = Set mood to 75
+5 = Set mood to 100
+
+Watch the console output and the red heart bar!"
